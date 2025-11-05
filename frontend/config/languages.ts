@@ -1,4 +1,4 @@
-export const courses = [
+export const languages = [
   {
     title: 'Python',
     icon: 'py',

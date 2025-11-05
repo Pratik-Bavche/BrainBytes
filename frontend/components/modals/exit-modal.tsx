@@ -59,7 +59,7 @@ export const ExitModal = () => {
             </Button>
 
             <Button
-              variant="dangerOutline"
+              variant="danger"
               className="w-full"
               size="lg"
               onClick={() => {

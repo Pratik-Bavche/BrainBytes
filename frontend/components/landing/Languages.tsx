@@ -36,7 +36,7 @@ export function Languages() {
           className="flex flex-wrap justify-center gap-2 text-center lg:gap-4"
           variants={list}
         >
-          {languages.map(({ flag, title }) => (
+          {languages.map(({ icon, title }) => (
             <AnimatedListItem key={title} className="basis-28 md:basis-40" variants={item}>
               <Button
                 variant="ghost"
@@ -48,7 +48,7 @@ export function Languages() {
                   className="!top-1/2 mx-auto h-1/2 w-1/2 -translate-y-1/2"
                 >
                   <NextImage
-                    src={`/img/flags/${flag}.svg`}
+                    src={`/img/flags/${icon}.svg`}
                     alt={`${title} flag`}
                     fill
                     className="rounded-md object-cover"

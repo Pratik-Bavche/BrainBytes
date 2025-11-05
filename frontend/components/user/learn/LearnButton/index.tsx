@@ -53,7 +53,8 @@ export function LearnButton({
           current={current}
           completed={completed}
           percentage={Number.isNaN(percentage) ? 0 : percentage}
-          href={completed ? `/lesson/${id}` : '/lesson'}
+          // href={completed ? `/lesson/${id}` : '/lesson'}
+          href={`/lesson`}
           hrefText={completed ? 'Practice' : 'Start'}
           prompt={completed ? 'Level up your proficiency!' : label}
           ariaLabel={label}

@@ -98,7 +98,7 @@ export function Footer() {
         </ClerkLoaded>
       </MotionDiv>
       <p className="text-center max-sm:text-sm">
-        © 2024 — Lingo by{' '}
+        © 2025 — Bytes by{' '}
         <a
           href="https://github.com/Oreek"
           target="_blank"
@@ -107,6 +107,13 @@ export function Footer() {
           @Oreek
         </a>{' '}
         +{' '}
+        <a
+          href="https://github.com/GauravKarakoti"
+          target="_blank"
+          className="font-semibold decoration-dotted transition hover:underline"
+        >
+          @GauravKarakoti
+        </a>{' '}
         .
       </p>
       <p className="text-center text-2xl">{`{◕ ◡ ◕}`}</p>

@@ -13,7 +13,7 @@ export function Header() {
         <div className="flex flex-1 items-center justify-start gap-1 max-sm:hidden">
           <Button variant="ghost" size="icon" asChild>
             <a
-              href="https://github.com/Oreek"
+              href="https://github.com/GauravKarakoti/BrainBytes"
               target="_blank"
               aria-label="GitHub repo"
               title="Github repo"

@@ -64,7 +64,7 @@ export const HeartsModal = () => {
             </Button>
 
             <Button
-              variant="primaryOutline"
+              variant="primary"
               className="w-full"
               size="lg"
               onClick={close}

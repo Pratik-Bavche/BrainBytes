@@ -18,7 +18,7 @@ export function SideMenu() {
           </span>
           <span className="sm:max-lg:hidden">
             <span className="font-display text-3xl font-bold -tracking-wide text-primary">
-              Lingo
+              Bytes
             </span>
           </span>
         </NextLink>

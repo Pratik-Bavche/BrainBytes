@@ -40,7 +40,8 @@ export async function POST(req: NextRequest) {
       stripeSubscriptionId: subscription.id,
       stripeCustomerId: subscription.customer as string,
       stripePriceId: subscription.items.data[0].price.id,
-      stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      // stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      stripeCurrentPeriodEnd: new Date(),
     });
   }
 
@@ -48,14 +49,16 @@ export async function POST(req: NextRequest) {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
     );
+    console.log("Subscription:", subscription);
 
     await db
       .update(userSubscription)
       .set({
         stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
+        // stripeCurrentPeriodEnd: new Date(
+        //   subscription.current_period_end * 1000
+        // ),
+        stripeCurrentPeriodEnd: new Date(),
       })
       .where(eq(userSubscription.stripeSubscriptionId, subscription.id));
   }
