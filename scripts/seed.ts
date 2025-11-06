@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/neon-http'
 import { neon } from '@neondatabase/serverless'
 
 import * as schema from '@/db/schema'
+import { QUESTS } from '@/config/quests' // Import QUESTS
 
 const sql = neon(process.env.DATABASE_URL!)
 
@@ -11,14 +12,18 @@ const main = async () => {
   try {
     console.log('🚧 [DB]: Seeding database...')
 
-    await db.delete(schema.courses)
-    await db.delete(schema.userProgress)
-    await db.delete(schema.units)
-    await db.delete(schema.challenges)
-    await db.delete(schema.challengeOptions)
+    // Clear existing data in reverse order of dependencies
     await db.delete(schema.challengeProgress)
+    await db.delete(schema.challengeOptions)
+    await db.delete(schema.challenges)
     await db.delete(schema.lessons)
+    await db.delete(schema.units)
+    await db.delete(schema.userQuestProgress) // Add this
+    await db.delete(schema.quests) // Add this
+    await db.delete(schema.userProgress)
+    await db.delete(schema.courses)
 
+    // Seed Courses
     await db.insert(schema.courses).values([
       {
         id: 1,
@@ -42,6 +47,7 @@ const main = async () => {
       },
     ])
 
+    // Seed Units
     await db.insert(schema.units).values([
       {
         id: 1,
@@ -66,6 +72,7 @@ const main = async () => {
       },
     ])
 
+    // Seed Lessons
     await db.insert(schema.lessons).values([
       {
         id: 1,
@@ -97,7 +104,6 @@ const main = async () => {
         order: 5,
         title: 'Sorting & Searching',
       },
-
       {
         id: 6,
         unitId: 2, // Linked Lists
@@ -130,13 +136,15 @@ const main = async () => {
       },
     ])
 
+    // Seed Challenges
     await db.insert(schema.challenges).values([
       {
         id: 1,
         lessonId: 1, // Array Basics
         type: 'SELECT',
         order: 1,
-        question: 'What is the time complexity of accessing an element in an array by index?',
+        question:
+          'What is the time complexity of accessing an element in an array by index?',
       },
       {
         id: 2,
@@ -154,6 +162,7 @@ const main = async () => {
       },
     ])
 
+    // Seed Challenge Options
     await db.insert(schema.challengeOptions).values([
       {
         id: 1,
@@ -228,6 +237,23 @@ const main = async () => {
         audioSrc: '/dsa_hashing.mp3',
       },
     ])
+
+    // --- Add Quests ---
+    console.log('Seeding quests...')
+    // Map data from config to the new schema format
+    const questsData = QUESTS.map((quest) => ({
+      // We don't provide an ID, it will be auto-generated
+      title: quest.title,
+      description: quest.description,
+      icon: quest.icon,
+      target: quest.target,
+      rewardPoints: quest.reward.points,
+      rewardGems: quest.reward.gems,
+      type: quest.type,
+    }))
+
+    await db.insert(schema.quests).values(questsData)
+    // --- End Add Quests ---
 
     console.log('✅ [DB]: Seeded 100%!')
   } catch (error) {

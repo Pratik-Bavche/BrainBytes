@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import { Trophy, Target } from 'lucide-react'
 import { QuestGrid } from '@/components/user/quests/QuestGrid'
 import { getUserProgress } from '@/db/queries/userProgress'
-import { QUESTS } from '@/config/quests'
+// 1. Import the new getQuests action
+import { getQuests } from '@/actions/quest'
 
 export default async function Quests() {
   const { userId } = await auth()
@@ -12,16 +13,23 @@ export default async function Quests() {
     redirect('/')
   }
 
-  const userProgress = await getUserProgress(userId)
+  // 3. Fetch user progress and all quests (with user progress) concurrently
+  const [userProgress, allQuests] = await Promise.all([
+    getUserProgress(userId),
+    getQuests(userId),
+  ])
 
   if (!userProgress) {
     redirect('/courses')
   }
 
-  const dailyQuests = QUESTS.filter((q) => q.type === 'daily')
-  const weeklyQuests = QUESTS.filter((q) => q.type === 'weekly')
-  const milestones = QUESTS.filter((q) => q.type === 'milestone')
-  const otherQuests = QUESTS.filter((q) => !['daily', 'weekly', 'milestone'].includes(q.type))
+  // 4. Filter quests based on data from the database
+  const dailyQuests = allQuests.filter((q) => q.type === 'daily')
+  const weeklyQuests = allQuests.filter((q) => q.type === 'weekly')
+  const milestones = allQuests.filter((q) => q.type === 'milestone')
+  const otherQuests = allQuests.filter(
+    (q) => !['daily', 'weekly', 'milestone'].includes(q.type),
+  )
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-6">
@@ -35,21 +43,29 @@ export default async function Quests() {
         </div>
       </div>
 
+      {/* This part remains the same */}
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-lg border-2 bg-card p-4 text-center">
           <p className="text-sm text-muted-foreground">Total Points</p>
-          <p className="text-3xl font-bold text-primary">{userProgress.points} XP</p>
+          <p className="text-3xl font-bold text-primary">
+            {userProgress.points} XP
+          </p>
         </div>
         <div className="rounded-lg border-2 bg-card p-4 text-center">
           <p className="text-sm text-muted-foreground">Gems Collected</p>
-          <p className="text-3xl font-bold text-secondary">💎 {userProgress.gems}</p>
+          <p className="text-3xl font-bold text-secondary">
+            💎 {userProgress.gems}
+          </p>
         </div>
         <div className="rounded-lg border-2 bg-card p-4 text-center">
           <p className="text-sm text-muted-foreground">Hearts</p>
-          <p className="text-3xl font-bold text-rose-500">❤️ {userProgress.hearts}</p>
+          <p className="text-3xl font-bold text-rose-500">
+            ❤️ {userProgress.hearts}
+          </p>
         </div>
       </div>
 
+      {/* 5. Pass the fetched data to QuestGrid */}
       {dailyQuests.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center gap-2">
@@ -58,7 +74,7 @@ export default async function Quests() {
               Resets daily
             </span>
           </div>
-          <QuestGrid quests={dailyQuests} userProgress={userProgress} />
+          <QuestGrid quests={dailyQuests} />
         </section>
       )}
 
@@ -70,7 +86,7 @@ export default async function Quests() {
               Resets weekly
             </span>
           </div>
-          <QuestGrid quests={weeklyQuests} userProgress={userProgress} />
+          <QuestGrid quests={weeklyQuests} />
         </section>
       )}
 
@@ -80,14 +96,14 @@ export default async function Quests() {
             <Trophy className="size-6 text-yellow-500" />
             <h2 className="text-2xl font-bold">Milestones</h2>
           </div>
-          <QuestGrid quests={milestones} userProgress={userProgress} />
+          <QuestGrid quests={milestones} />
         </section>
       )}
 
       {otherQuests.length > 0 && (
         <section className="space-y-4">
           <h2 className="text-2xl font-bold">Other Challenges</h2>
-          <QuestGrid quests={otherQuests} userProgress={userProgress} />
+          <QuestGrid quests={otherQuests} />
         </section>
       )}
     </div>

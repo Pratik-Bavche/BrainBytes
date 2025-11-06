@@ -1,15 +1,26 @@
 'use client'
 
-import { type Quest, calculateProgress } from '@/config/quests'
-import { Button } from '@/components/ui/button'
+// 1. Import the new database types
+import {
+  type Quest,
+  type UserQuestProgress,
+} from '@/db/schema/quests'
+import { calculateProgress } from '@/config/quests'
 
-type QuestCardProps = {
-  quest: Quest
-  currentProgress: number
-  isCompleted?: boolean
+type QuestWithProgress = Quest & {
+  userQuestProgress: UserQuestProgress[]
 }
 
-export function QuestCard({ quest, currentProgress, isCompleted = false }: QuestCardProps) {
+type QuestCardProps = {
+  quest: QuestWithProgress
+}
+
+export function QuestCard({ quest }: QuestCardProps) {
+  // 2. Get progress data from the quest prop
+  const progressData = quest.userQuestProgress[0] // Get the first (and only) progress for this user
+  const currentProgress = progressData?.currentProgress || 0
+  const isCompleted = progressData?.completed || false
+
   const progress = calculateProgress(currentProgress, quest.target)
   const progressText = `${currentProgress}/${quest.target}`
 
@@ -41,10 +52,14 @@ export function QuestCard({ quest, currentProgress, isCompleted = false }: Quest
           ✓ Completed
         </div>
       )}
-      
+
       <div className="mb-4 flex items-center justify-between">
         <div className="text-5xl">{quest.icon}</div>
-        <div className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase ${getTypeColor(quest.type)}`}>
+        <div
+          className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase ${getTypeColor(
+            quest.type,
+          )}`}
+        >
           {quest.type}
         </div>
       </div>
@@ -59,7 +74,7 @@ export function QuestCard({ quest, currentProgress, isCompleted = false }: Quest
           <span className="text-muted-foreground">Progress</span>
           <span className="font-semibold">{progressText}</span>
         </div>
-        
+
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
           <div
             className="h-full rounded-full bg-primary transition-all duration-500"
@@ -68,9 +83,14 @@ export function QuestCard({ quest, currentProgress, isCompleted = false }: Quest
         </div>
 
         <div className="flex items-center gap-3 pt-2 text-sm">
-          <span className="font-semibold text-primary">+{quest.reward.points} XP</span>
-          {quest.reward.gems > 0 && (
-            <span className="font-semibold text-secondary">+{quest.reward.gems} 💎</span>
+          {/* 3. Use reward fields from quest data */}
+          <span className="font-semibold text-primary">
+            +{quest.rewardPoints} XP
+          </span>
+          {quest.rewardGems > 0 && (
+            <span className="font-semibold text-secondary">
+              +{quest.rewardGems} 💎
+            </span>
           )}
         </div>
       </div>
@@ -79,39 +99,19 @@ export function QuestCard({ quest, currentProgress, isCompleted = false }: Quest
 }
 
 type QuestGridProps = {
-  quests: readonly Quest[]
-  userProgress: {
-    points: number
-    // Add other tracking fields as needed
-  }
+  quests: QuestWithProgress[]
 }
 
-export function QuestGrid({ quests, userProgress }: QuestGridProps) {
-  // Mock progress calculation - in a real app, this would come from the database
-  const getQuestProgress = (quest: Quest) => {
-    // For demonstration, we'll use points as a proxy for some quests
-    if (quest.type === 'progress' || quest.type === 'milestone') {
-      return Math.min(userProgress.points / 10, quest.target)
-    }
-    // Return random progress for demo
-    return Math.floor(Math.random() * quest.target)
-  }
-
+// 4. Simplify QuestGrid: remove userProgress prop and mock logic
+export function QuestGrid({ quests }: QuestGridProps) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {quests.map((quest) => {
-        const currentProgress = getQuestProgress(quest)
-        const isCompleted = currentProgress >= quest.target
-        
-        return (
-          <QuestCard
-            key={quest.id}
-            quest={quest}
-            currentProgress={currentProgress}
-            isCompleted={isCompleted}
-          />
-        )
-      })}
+      {quests.map((quest) => (
+        <QuestCard
+          key={quest.id}
+          quest={quest}
+        />
+      ))}
     </div>
   )
 }
