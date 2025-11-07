@@ -5,7 +5,7 @@ import { ShopGrid } from '@/components/user/shop/ShopGrid'
 import { getUserProgress } from '@/db/queries/userProgress'
 import { SHOP_ITEMS } from '@/config/shop'
 import { WalletManager } from '@/components/user/ConnectWalletButton'
-import { getByteBalance } from '@/lib/token'
+import { BYTEBalance } from '@/lib/token'
 
 export default async function Shop() {
   const { userId } = await auth()
@@ -20,10 +20,7 @@ export default async function Shop() {
     redirect('/courses')
   }
 
-  let byteBalance = '0.0'
-  if (userProgress.walletAddress) {
-    byteBalance = await getByteBalance(userProgress.walletAddress)
-  }
+  const byteBalance = await BYTEBalance();
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-6 px-4 py-6">
@@ -78,6 +75,7 @@ export default async function Shop() {
           hearts={userProgress.hearts}
           points={userProgress.points}
           gems={userProgress.gems}
+          bytes={Number(byteBalance)}
         />
       </div>
     </div>

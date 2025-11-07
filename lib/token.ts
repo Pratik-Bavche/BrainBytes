@@ -1,5 +1,7 @@
+'use server'
+import { getUserProgress } from '@/db/queries/userProgress'
+import { auth } from '@clerk/nextjs/server'
 import { ethers } from 'ethers'
-import 'server-only'
 
 const contractAddress = process.env.NEXT_PUBLIC_BYTE_TOKEN_ADDRESS
 const rpcUrl = process.env.RPC_PROVIDER_URL
@@ -39,4 +41,17 @@ export const getByteBalance = async (
     console.error('[BYTE_BALANCE_FETCH] Failed to fetch token balance:', error)
     return '0.0'
   }
+}
+
+export async function BYTEBalance() {
+  const { userId } = await auth()
+
+  const userProgress = await getUserProgress(userId)
+
+  let byteBalance = '0.0'
+  if (userProgress!.walletAddress) {
+    byteBalance = await getByteBalance(userProgress!.walletAddress)
+  }
+
+  return byteBalance;
 }
