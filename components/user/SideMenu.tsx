@@ -26,6 +26,7 @@ export function SideMenu() {
           <SideMenuItem href="/learn" icon="learn" label="Learn" />
           <SideMenuItem href="/leaderboard" icon="leaderboard" label="Leaderboard" />
           <SideMenuItem href="/quests" icon="quests" label="Quests" />
+          <SideMenuItem href="/forum" icon="forum" label="Forum" />
           <SideMenuItem href="/compete" icon="code" label="Compete" />
           <SideMenuItem href="/shop" icon="shop" label="Shop" />
         </ul>
