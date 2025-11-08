@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { savewallet_address } from '@/actions/saveWallet'
+import LoadingSVG from '@/public/img/icons/loader.svg'
 
 const SEPOLIA_CHAIN_ID = sepolia.id
 
@@ -23,9 +24,11 @@ export const ConnectWalletButton = () => {
       if (chainId === SEPOLIA_CHAIN_ID) {
         startTransition(async () => {
           const result = await savewallet_address(address)
-          console.log("Result:",result)
+          console.log('Result:', result)
           if (result.error) {
-            toast.error(result.error)
+            if (result.error !== 'This wallet address is already in use.') {
+              toast.error(result.error)
+            }
           } else {
             toast.success('Wallet linked successfully!')
           }
@@ -89,8 +92,16 @@ export const ConnectWalletButton = () => {
       variant="primary"
       onClick={() => connect({ connector: injected() })}
       disabled={isConnecting || isPending}
+      className="flex items-center gap-2"
     >
-      {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+      {isConnecting ? (
+        <>
+          <LoadingSVG className="size-5 animate-spin" />
+          Connecting...
+        </>
+      ) : (
+        'Connect Wallet'
+      )}
     </Button>
   )
 }
@@ -108,21 +119,27 @@ export const WalletManager = ({
   const { address, isConnected, chainId } = useAccount()
   const [isPending, startTransition] = useTransition()
 
-  if (isConnected && address) {
-    if (chainId === SEPOLIA_CHAIN_ID) {
-      startTransition(async () => {
-        const result = await savewallet_address(address)
-        console.log("Result:",result)
-        if (result.error) {
-          toast.error(result.error)
-        } else {
-          toast.success('Wallet linked successfully!')
+  useEffect(() => {
+    if (isConnected && address) {
+      if (chainId === SEPOLIA_CHAIN_ID) {
+        if (savedwallet_address?.toLowerCase() !== address.toLowerCase()) {
+          startTransition(async () => {
+            const result = await savewallet_address(address)
+            console.log('Result:', result)
+            if (result.error) {
+              if (result.error !== 'This wallet address is already in use.') {
+                toast.error(result.error)
+              }
+            } else {
+              toast.success('Wallet linked successfully!')
+            }
+          })
         }
-      })
-    } else if (!isPending) {
-      toast.error('Wrong network. Please switch to Sepolia to link your wallet.')
+      } else if (!isPending) {
+        toast.error('Wrong network. Please switch to Sepolia to link your wallet.')
+      }
     }
-  }
+  }, [address, isConnected, chainId, isPending, startTransition, savedwallet_address])
 
   if (isConnected && address) {
     if (chainId !== SEPOLIA_CHAIN_ID) {
@@ -159,11 +176,12 @@ export const WalletManager = ({
         <span className="font-mono text-sm text-primary">
           {truncateAddress(address)}
         </span>
-        {savedwallet_address && savedwallet_address.toLowerCase() !== address.toLowerCase() && (
-          <p className="text-center text-xs text-destructive">
-            Warning: This is not the wallet you have saved for rewards.
-          </p>
-        )}
+        {savedwallet_address &&
+          savedwallet_address.toLowerCase() !== address.toLowerCase() && (
+            <p className="text-center text-xs text-destructive">
+              Warning: This is not the wallet you have saved for rewards.
+            </p>
+          )}
         <Button
           variant="ghost"
           size="sm"
