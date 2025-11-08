@@ -4,11 +4,7 @@ import { relations, sql } from 'drizzle-orm'
 import { lessons } from '@/db/schema/lessons'
 import { challengeProgress } from '@/db/schema/challengeProgress'
 
-<<<<<<< HEAD
-export const challengesEnum = pgEnum('type', ['SELECT', 'HINT', 'CODE'])
-=======
 export const challengesEnum = pgEnum('type', ['SELECT', 'HINT', 'CODE']);
->>>>>>> 33d6e772c4b80f72dd996932673283c9a00682f7
 
 export const challenges = pgTable('challenges', {
   id: serial('id').primaryKey(),

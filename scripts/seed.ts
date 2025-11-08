@@ -412,8 +412,33 @@ const main = async () => {
         lessonId: 23,
         type: 'CODE',
         order: 1,
-        question: 'Can an interface have constructors?',
-      }
+        question: 'Python',
+        problemDescription: 'Given an input string, write a Python function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".',
+      },
+      {
+        id: 18,
+        lessonId: 24,
+        type: 'CODE',
+        order: 1,
+        question: 'C++ ',
+        problemDescription: 'Given an input string, write a C++ function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".', 
+      },
+        {
+        id: 19,
+        lessonId: 25,
+        type: 'CODE',
+        order: 1,
+        question: 'Java',
+        problemDescription: 'Given an input string, write a Java function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".'
+      },
+      {
+        id: 20,
+        lessonId: 26,
+        type: 'CODE',
+        order: 1,
+        question: 'JavaScript',
+        problemDescription: 'Given an input string, write a JavaScript function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".'
+      },
     ])
 
     await db.insert(schema.challengeOptions).values([
