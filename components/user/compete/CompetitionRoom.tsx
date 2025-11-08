@@ -56,7 +56,6 @@ export function CompetitionRoom({ challenge }: Props) {
         setStatus('waiting')
         toast.info('Waiting for an opponent to join...', { id: WAITING_TOAST_ID })
       }
-<<<<<<< HEAD
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to find a match'
       dismissStatusToasts()
@@ -80,14 +79,6 @@ export function CompetitionRoom({ challenge }: Props) {
       toast.dismiss(SUBMISSION_TOAST_ID)
     }
   }, [])
-=======
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [challenge.id, status, error]);
->>>>>>> 8aed236806f0ecdc8acb2ab71dfab6392c4d7873
 
   useEffect(() => {
     if (!match?.id || !userId) return;

@@ -42,7 +42,7 @@ export function Hero() {
           <span>
             Master{' '}
             <span className="rounded-full border border-highlight/25 bg-highlight/50 px-[0.35em] py-[0.125em] text-highlight-depth dark:bg-highlight/85 dark:text-background">
-              DSA
+              Programming
             </span>
           </span>
           <span className="flex flex-wrap items-center justify-center">
