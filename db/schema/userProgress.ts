@@ -14,7 +14,7 @@ export const userProgress = pgTable('user_progress', {
   hearts: integer('hearts').notNull().default(5),
   points: integer('points').notNull().default(0),
   gems: integer('gems').notNull().default(0),
-  walletAddress: text('wallet_address').unique(),
+  wallet_address: text('wallet_address').unique(),
   level: integer('level').notNull().default(0),
 })
 

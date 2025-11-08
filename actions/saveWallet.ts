@@ -7,14 +7,14 @@ import { userProgress } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { ethers } from 'ethers'
 
-export const saveWalletAddress = async (walletAddress: string) => {
+export const savewallet_address = async (wallet_address: string) => {
   const { userId } = await auth()
 
   if (!userId) {
     return { error: 'Unauthorized' }
   }
 
-  if (!ethers.isAddress(walletAddress)) {
+  if (!ethers.isAddress(wallet_address)) {
     return { error: 'Invalid wallet address' }
   }
 
@@ -22,14 +22,14 @@ export const saveWalletAddress = async (walletAddress: string) => {
     await db
       .update(userProgress)
       .set({
-        walletAddress: walletAddress,
+        wallet_address: wallet_address,
       })
       .where(eq(userProgress.userId, userId))
 
     revalidateTag(`get_user_progress::${userId}`)
     revalidateTag('get_user_progress')
-
-    return { success: true, walletAddress: walletAddress }
+    console.log("Wallet Updated:",userProgress)
+    return { success: true, wallet_address: wallet_address }
   } catch (error) {
     console.error('Error saving wallet address:', error)
     if (error instanceof Error && error.message.includes('duplicate key')) {

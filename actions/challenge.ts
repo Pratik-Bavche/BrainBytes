@@ -123,12 +123,13 @@ export async function upsertChallengeProgress(challengeId: number) {
         level: newLevelData.level,
       })
       .where(eq(userProgress.userId, userId))
-
-    if (currentUserProgress.walletAddress) {
+    
+    console.log("Current User Progress:",currentUserProgress)
+    if (currentUserProgress.wallet_address) {
       try {
         const amount = ethers.parseUnits(TOKENS_PER_CHALLENGE.toString(), B_DECIMALS);
-        const tx = await byteTokenContract.mint(currentUserProgress.walletAddress, amount);
-        console.log(`Minting ${TOKENS_PER_CHALLENGE} BYTE to ${currentUserProgress.walletAddress}, tx: ${tx.hash}`);
+        const tx = await byteTokenContract.mint(currentUserProgress.wallet_address, amount);
+        console.log(`Minting ${TOKENS_PER_CHALLENGE} BYTE to ${currentUserProgress.wallet_address}, tx: ${tx.hash}`);
       } catch (error) {
         console.error("Failed to mint BYTE tokens:", error);
       }

@@ -7,7 +7,7 @@ import { sepolia } from 'wagmi/chains'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
-import { saveWalletAddress } from '@/actions/saveWallet'
+import { savewallet_address } from '@/actions/saveWallet'
 
 const SEPOLIA_CHAIN_ID = sepolia.id
 
@@ -22,7 +22,8 @@ export const ConnectWalletButton = () => {
     if (isConnected && address) {
       if (chainId === SEPOLIA_CHAIN_ID) {
         startTransition(async () => {
-          const result = await saveWalletAddress(address)
+          const result = await savewallet_address(address)
+          console.log("Result:",result)
           if (result.error) {
             toast.error(result.error)
           } else {
@@ -95,15 +96,32 @@ export const ConnectWalletButton = () => {
 }
 
 export const WalletManager = ({
-  savedWalletAddress,
+  savedwallet_address,
 }: {
-  savedWalletAddress: string | null
+  savedwallet_address: string | null
 }) => {
-  const { address, isConnected, chainId } = useAccount()
   const { switchChain } = useSwitchChain()
-
+  const { disconnect } = useDisconnect()
   const truncateAddress = (addr: string) => {
     return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`
+  }
+  const { address, isConnected, chainId } = useAccount()
+  const [isPending, startTransition] = useTransition()
+
+  if (isConnected && address) {
+    if (chainId === SEPOLIA_CHAIN_ID) {
+      startTransition(async () => {
+        const result = await savewallet_address(address)
+        console.log("Result:",result)
+        if (result.error) {
+          toast.error(result.error)
+        } else {
+          toast.success('Wallet linked successfully!')
+        }
+      })
+    } else if (!isPending) {
+      toast.error('Wrong network. Please switch to Sepolia to link your wallet.')
+    }
   }
 
   if (isConnected && address) {
@@ -124,6 +142,13 @@ export const WalletManager = ({
           >
             Switch to Sepolia
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => disconnect()}
+          >
+            Disconnect
+          </Button>
         </div>
       )
     }
@@ -134,22 +159,28 @@ export const WalletManager = ({
         <span className="font-mono text-sm text-primary">
           {truncateAddress(address)}
         </span>
-        {savedWalletAddress &&
-          savedWalletAddress.toLowerCase() !== address.toLowerCase() && (
-            <p className="text-center text-xs text-destructive">
-              Warning: This is not the wallet you have saved for rewards.
-            </p>
-          )}
+        {savedwallet_address && savedwallet_address.toLowerCase() !== address.toLowerCase() && (
+          <p className="text-center text-xs text-destructive">
+            Warning: This is not the wallet you have saved for rewards.
+          </p>
+        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => disconnect()}
+        >
+          Disconnect
+        </Button>
       </div>
     )
   }
 
-  if (savedWalletAddress) {
+  if (savedwallet_address) {
     return (
       <div className="flex flex-col items-center gap-2 rounded-lg border-2 bg-card p-4">
         <p className="text-sm text-muted-foreground">Linked Wallet</p>
         <span className="font-mono text-sm font-semibold">
-          {truncateAddress(savedWalletAddress)}
+          {truncateAddress(savedwallet_address)}
         </span>
         <ConnectWalletButton />
       </div>

@@ -63,7 +63,7 @@ export default async function Shop() {
 
         <div className="sm:col-span-1">
           <WalletManager
-            savedWalletAddress={userProgress.walletAddress || null}
+            savedwallet_address={userProgress.wallet_address || null}
           />
         </div>
       </div>

@@ -48,11 +48,11 @@ export async function verifyRedemption(itemId: number, txHash: string) {
       where: eq(userProgress.userId, userId),
     });
     
-    if (!uProgress || !uProgress.walletAddress) {
+    if (!uProgress || !uProgress.wallet_address) {
        return { error: 'User wallet not linked.' }
     }
 
-    if (receipt.from.toLowerCase() !== uProgress.walletAddress.toLowerCase()) {
+    if (receipt.from.toLowerCase() !== uProgress.wallet_address.toLowerCase()) {
       return { error: 'Transaction was not sent from your wallet.' }
     }
 
@@ -67,7 +67,7 @@ export async function verifyRedemption(itemId: number, txHash: string) {
           if (parsedLog && parsedLog.name === 'Transfer') {
             const [from, to, value] = parsedLog.args;
             if (
-              from.toLowerCase() === uProgress.walletAddress.toLowerCase() &&
+              from.toLowerCase() === uProgress.wallet_address.toLowerCase() &&
               to.toLowerCase() === SHOP_WALLET_ADDRESS.toLowerCase() &&
               value === expectedAmount
             ) {

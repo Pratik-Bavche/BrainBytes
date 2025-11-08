@@ -26,14 +26,14 @@ if (provider && contractAddress) {
 }
 
 export const getByteBalance = async (
-  walletAddress: string
+  wallet_address: string
 ): Promise<string> => {
-  if (!contract || !walletAddress) {
+  if (!contract || !wallet_address) {
     return '0.0'
   }
 
   try {
-    const balance = await contract.balanceOf(walletAddress)
+    const balance = await contract.balanceOf(wallet_address)
     const formattedBalance = ethers.formatUnits(balance, 18)
     
     return parseFloat(formattedBalance).toFixed(2)
@@ -49,8 +49,8 @@ export async function BYTEBalance() {
   const userProgress = await getUserProgress(userId)
 
   let byteBalance = '0.0'
-  if (userProgress!.walletAddress) {
-    byteBalance = await getByteBalance(userProgress!.walletAddress)
+  if (userProgress!.wallet_address) {
+    byteBalance = await getByteBalance(userProgress!.wallet_address)
   }
 
   return byteBalance;
