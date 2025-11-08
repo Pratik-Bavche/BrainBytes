@@ -92,7 +92,7 @@ export function CompetitionRoom({ challenge }: Props) {
     if (!match?.id || !userId) return;
 
     const pusherClient = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-      cluster: process.env.PUSHER_CLUSTER!,
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
       authEndpoint: '/api/pusher/auth',
     });
 
