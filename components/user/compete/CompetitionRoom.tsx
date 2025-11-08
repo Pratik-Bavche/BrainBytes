@@ -1,13 +1,18 @@
 'use client'
 
-import { useState, useEffect, useTransition, useRef } from 'react'
+import { useState, useEffect, useTransition, useRef, useCallback } from 'react'
 import { ChallengeType, ChallengeMatchType } from '@/db/schema'
 import { findOrJoinMatch, submitP2PChallenge, sendProgressUpdate } from '@/actions/challengeMatch'
 import Editor from '@monaco-editor/react'
 import Pusher from 'pusher-js'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { useUser } from '@clerk/nextjs'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { useUser } from '@auth0/nextjs-auth0/client'
+
+const FINDING_TOAST_ID = 'competition-finding'
+const WAITING_TOAST_ID = 'competition-waiting'
+const SUBMISSION_TOAST_ID = 'competition-submitting'
 
 type Props = {
   challenge: ChallengeType
@@ -22,71 +27,58 @@ export function CompetitionRoom({ challenge }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, startSubmission] = useTransition()
 
-  const { user } = useUser(); 
-  const userId = user?.id;
+  const { user } = useUser()
+  const userId = user?.sub
 
-  const findingRef = useRef(false);
+  const findingRef = useRef(false)
 
-  useEffect(() => {
-    if (findingRef.current) return;
-    if (status !== 'idle' || !challenge.id || error) return;
+  const dismissStatusToasts = useCallback(() => {
+    toast.dismiss(FINDING_TOAST_ID)
+    toast.dismiss(WAITING_TOAST_ID)
+  }, [])
 
-    findingRef.current = true;
-    setStatus('waiting');
-    toast.loading('Finding an opponent...');
+  const startMatchSearch = useCallback(async () => {
+    if (findingRef.current || !challenge.id) return
 
-    let cancelled = false;
+    findingRef.current = true
+    setStatus('waiting')
+    toast.loading('Finding an opponent...', { id: FINDING_TOAST_ID })
 
-    (async () => {
-      try {
-        const result: any = await findOrJoinMatch(challenge.id);
-        if (cancelled) return;
+    try {
+      const result: any = await findOrJoinMatch(challenge.id)
+      setMatch(result.match)
 
-        setMatch(result.match);
-
-        if (result.status === 'joined') {
-          setStatus('in_progress');
-          toast.success('Opponent found! The match has started.');
-        } else {
-          setStatus('waiting');
-          toast.dismiss();
-          toast('Waiting for an opponent to join...');
-        }
-      } catch (err: any) {
-        if (cancelled) return;
-        toast.error(err?.message ?? 'Failed to find a match');
-        setError(err?.message ?? String(err));
+      if (result.status === 'joined') {
+        dismissStatusToasts()
+        setStatus('in_progress')
+        toast.success('Opponent found! The match has started.')
+      } else {
+        setStatus('waiting')
+        toast.info('Waiting for an opponent to join...', { id: WAITING_TOAST_ID })
       }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [challenge.id, status, error]);
-
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to find a match'
+      dismissStatusToasts()
+      toast.error(message)
+      setError(message)
+    } finally {
+      findingRef.current = false
+    }
+  }, [challenge.id, dismissStatusToasts])
 
   useEffect(() => {
-    if (status === 'idle' && challenge.id && !error) {
-      setStatus('waiting');
-      toast.loading('Finding an opponent...');
-      findOrJoinMatch(challenge.id)
-        .then((result:any) => {
-          setMatch(result.match);
-          if (result.status === 'joined') {
-            setStatus('in_progress');
-            toast.success('Opponent found! The match has started.');
-          } else {
-            setStatus('waiting');
-            toast.dismiss();
-            toast('Waiting for an opponent to join...');
-          }
-        })
-        .catch((err:any) => {
-          toast.error(err.message);
-          setError(err.message);
-        });
+    if (status === 'idle' && !error) {
+      startMatchSearch()
     }
-  }, [status, challenge.id, error]);
+  }, [status, error, startMatchSearch])
+
+  useEffect(() => {
+    return () => {
+      toast.dismiss(FINDING_TOAST_ID)
+      toast.dismiss(WAITING_TOAST_ID)
+      toast.dismiss(SUBMISSION_TOAST_ID)
+    }
+  }, [])
 
   useEffect(() => {
     if (!match?.id || !userId) return;
@@ -102,7 +94,7 @@ export function CompetitionRoom({ challenge }: Props) {
     channel.bind('match-start', (data: { match: ChallengeMatchType }) => {
       setMatch(data.match);
       setStatus('in_progress');
-      toast.dismiss();
+      dismissStatusToasts();
       toast.success('Opponent found! The match has started.');
     });
 
@@ -115,7 +107,7 @@ export function CompetitionRoom({ challenge }: Props) {
     channel.bind('match-over', (data: { winnerId: string }) => {
       setWinnerId(data.winnerId);
       setStatus('completed');
-      toast.dismiss();
+      dismissStatusToasts();
     });
 
     return () => {
@@ -123,7 +115,7 @@ export function CompetitionRoom({ challenge }: Props) {
       pusherClient.disconnect();
     };
 
-  }, [match?.id, userId]);
+  }, [dismissStatusToasts, match?.id, userId]);
 
   const handleCodeChange = (value: string | undefined) => {
     if (value === undefined) return;
@@ -136,15 +128,17 @@ export function CompetitionRoom({ challenge }: Props) {
   const handleSubmit = () => {
     if (!match) return;
     startSubmission(() => {
-      toast.loading('Submitting and testing your solution...');
+      toast.loading('Submitting and testing your solution...', { id: SUBMISSION_TOAST_ID });
       submitP2PChallenge(match.id, code, 'javascript') // TODO: Remove the hardcoded language
         .then((res:any) => {
-          toast.dismiss();
-          if(res.error) toast.error(res.error);
+          toast.dismiss(SUBMISSION_TOAST_ID);
+          if (res?.error) {
+            toast.error(res.error);
+          }
         })
         .catch((err:any) => {
-          toast.dismiss();
-          toast.error(err.message)
+          toast.dismiss(SUBMISSION_TOAST_ID);
+          toast.error(err?.message ?? 'Submission failed')
         });
     });
   }
@@ -154,9 +148,17 @@ export function CompetitionRoom({ challenge }: Props) {
       <div className="text-center p-10">
         <div className="text-2xl font-bold text-destructive">Error finding match</div>
         <p className="text-muted-foreground">{error}</p>
-        <Button onClick={() => { setError(null); setStatus('idle'); }} variant="highlight" className="mt-4">
+        <button
+          type="button"
+          onClick={() => {
+            dismissStatusToasts()
+            setError(null)
+            setStatus('idle')
+          }}
+          className={cn(buttonVariants({ variant: 'highlight' }), 'mt-4')}
+        >
           Try Again
-        </Button>
+        </button>
       </div>
     )
   }
@@ -208,15 +210,14 @@ export function CompetitionRoom({ challenge }: Props) {
           />
         </div>
 
-        <Button 
-          onClick={handleSubmit} 
+        <button
+          type="button"
+          onClick={handleSubmit}
           disabled={isSubmitting || status !== 'in_progress'}
-          variant="primary" 
-          size="lg" 
-          className="w-full"
+          className={cn(buttonVariants({ variant: 'primary', size: 'lg' }), 'w-full')}
         >
           {isSubmitting ? 'Testing...' : 'Submit Solution'}
-        </Button>
+        </button>
       </div>
     </div>
   )

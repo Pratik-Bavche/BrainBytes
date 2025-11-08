@@ -1,14 +1,13 @@
-import { auth } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { db } from '@/db/drizzle'
 import { challenges } from '@/db/schema'
 import { eq } from 'drizzle-orm'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { requireUser } from '@/lib/auth0'
+import { cn } from '@/lib/utils'
 
 export default async function CompeteListPage() {
-  const { userId } = await auth()
-  if (!userId) redirect('/')
+  await requireUser()
 
   const codeChallenges = await db.query.challenges.findMany({
     where: eq(challenges.type, 'CODE'), //
@@ -30,14 +29,12 @@ export default async function CompeteListPage() {
             <Link
               href={`/compete/${challenge.id}`}
               key={challenge.id}
-              className="block"
+              className={cn(
+                buttonVariants({ variant: 'highlight', size: 'lg' }),
+                'w-full h-auto flex justify-between items-center'
+              )}
             >
-              <Button
-                variant="highlight"
-                className="w-full h-auto py-4 flex justify-between items-center"
-              >
-                <span className="text-lg font-semibold">{challenge.question}</span>
-              </Button>
+              <span className="text-lg font-semibold">{challenge.question}</span>
             </Link>
           ))
         )}

@@ -1,9 +1,9 @@
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import Pusher from 'pusher'
 import { db } from '@/db/drizzle'
 import { challengeMatches } from '@/db/schema'
 import { eq } from 'drizzle-orm'
+import { requireUser } from '@/lib/auth0'
 
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID!,
@@ -14,10 +14,8 @@ const pusher = new Pusher({
 })
 
 export async function POST(req: Request) {
-  const { userId } = await auth()
-  if (!userId) {
-    return new NextResponse('Unauthorized', { status: 401 })
-  }
+  const user = await requireUser()
+  const userId = user.id
 
   const body = await req.formData()
   const socketId = body.get('socket_id') as string
@@ -34,7 +32,7 @@ export async function POST(req: Request) {
           where: eq(challengeMatches.id, parseInt(matchId, 10))
       });
 
-      if (!match || (match.playerOneId !== userId && match.playerTwoId !== userId)) {
+    if (!match || (match.playerOneId !== userId && match.playerTwoId !== userId)) {
           return new NextResponse('Forbidden: Not part of match', { status: 403 })
       }
   } catch (e) {

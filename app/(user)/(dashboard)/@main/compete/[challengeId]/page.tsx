@@ -1,9 +1,8 @@
-import { auth } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
 import { db } from '@/db/drizzle'
 import { challenges } from '@/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { CompetitionRoom } from '@/components/user/compete/CompetitionRoom'
+import { requireUser } from '@/lib/auth0'
 
 type Props = {
   params: {
@@ -12,8 +11,7 @@ type Props = {
 }
 
 export default async function CompetePage({ params }: Props) {
-  const { userId } = await auth()
-  if (!userId) redirect('/')
+  await requireUser()
 
   const challenge = await db.query.challenges.findFirst({
     where: and(

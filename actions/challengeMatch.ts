@@ -1,6 +1,6 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
+import { requireUser } from '@/lib/auth0'
 import { db } from '@/db/drizzle'
 import { challengeMatches, userProgress } from '@/db/schema'
 import { and, eq, isNull, sql } from 'drizzle-orm'
@@ -16,8 +16,8 @@ const pusher = new Pusher({
 })
 
 export async function findOrJoinMatch(challengeId: number) {
-  const { userId } = await auth()
-  if (!userId) throw new Error('Unauthorized')
+  const user = await requireUser()
+  const userId = user.id
 
   const existingMatch = await db.query.challengeMatches.findFirst({
     where: and(
@@ -68,8 +68,8 @@ export async function findOrJoinMatch(challengeId: number) {
 }
 
 export async function submitP2PChallenge(matchId: number, code: string, language: string) {
-    const { userId } = await auth();
-    if (!userId) throw new Error('Unauthorized');
+  const user = await requireUser();
+  const userId = user.id;
 
     const match = await db.query.challengeMatches.findFirst({
         where: eq(challengeMatches.id, matchId),
@@ -168,8 +168,8 @@ export async function submitP2PChallenge(matchId: number, code: string, language
 }
 
 export async function sendProgressUpdate(matchId: number, code: string) {
-    const { userId } = await auth();
-    if (!userId) throw new Error('Unauthorized');
+  const user = await requireUser();
+  const userId = user.id;
 
     await pusher.trigger(`private-match-${matchId}`, `opponent-progress`, {
         senderId: userId,
