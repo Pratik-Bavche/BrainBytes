@@ -60,3 +60,8 @@ pnpm-debug.log*
 # Optional: if you use Tailwind or TypeScript
 .next-env.d.ts
 LEADERBOARD_FIX.md
+
+
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

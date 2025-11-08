@@ -1,18 +1,21 @@
 import { cache } from 'react'
 import { getSession } from '@auth0/nextjs-auth0'
 
+type SessionResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+type SessionUser = NonNullable<SessionResult['user']>
+
 export type AuthUser = {
   id: string
   email: string | null
   name: string
   picture: string
-  raw: NonNullable<Awaited<ReturnType<typeof getSession>>['user']>
+  raw: SessionUser
 }
 
 const FALLBACK_AVATAR = '/logo.svg'
 const FALLBACK_NAME = 'User'
 
-function mapUser(sessionUser: NonNullable<Awaited<ReturnType<typeof getSession>>['user']>): AuthUser {
+function mapUser(sessionUser: SessionUser): AuthUser {
   return {
     id: sessionUser.sub,
     email: sessionUser.email ?? null,
