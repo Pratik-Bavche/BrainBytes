@@ -1,4 +1,3 @@
-
 import { drizzle } from 'drizzle-orm/neon-http'
 import { neon } from '@neondatabase/serverless'
 
@@ -286,6 +285,14 @@ const main = async () => {
       },
     ])
 
+    const reverseStringTestCases = [
+      { input: 'hello', output: 'olleh' },
+      { input: 'world', output: 'dlrow' },
+      { input: 'BrainBytes', output: 'setyBniarB' },
+      { input: 'a', output: 'a' },
+      { input: '', output: '' },
+    ]
+
     await db.insert(schema.challenges).values([
       // Python - Lesson 1: Array Basics
       {
@@ -407,37 +414,58 @@ const main = async () => {
         order: 2,
         question: 'Can an interface have constructors?',
       },
+      // CODE Challenges
       {
         id: 17,
         lessonId: 23,
         type: 'CODE',
         order: 1,
-        question: 'Python',
+        question: 'Python Reverse String',
         problemDescription: 'Given an input string, write a Python function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".',
+        stubCodePy: 'def reverse_string(s):\n  # Your code here\n  return ""',
+        stubCodeJs: 'function reverseString(s) {\n  // Your code here\n  return "";\n}',
+        stubCodeJava: 'class Solution {\n    public String reverseString(String s) {\n        // Your code here\n        return "";\n    }\n}',
+        stubCodeCpp: '#include <string>\n#include <algorithm>\n\nstd::string reverseString(std::string s) {\n  // Your code here\n  return "";\n}',
+        testCases: reverseStringTestCases,
       },
       {
         id: 18,
         lessonId: 24,
         type: 'CODE',
         order: 1,
-        question: 'C++ ',
+        question: 'C++ Reverse String',
         problemDescription: 'Given an input string, write a C++ function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".', 
+        stubCodePy: 'def reverse_string(s):\n  # Your code here\n  return ""',
+        stubCodeJs: 'function reverseString(s) {\n  // Your code here\n  return "";\n}',
+        stubCodeJava: 'class Solution {\n    public String reverseString(String s) {\n        // Your code here\n        return "";\n    }\n}',
+        stubCodeCpp: '#include <string>\n#include <algorithm>\n\nstd::string reverseString(std::string s) {\n  // Your code here\n  return "";\n}',
+        testCases: reverseStringTestCases,
       },
         {
         id: 19,
         lessonId: 25,
         type: 'CODE',
         order: 1,
-        question: 'Java',
-        problemDescription: 'Given an input string, write a Java function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".'
+        question: 'Java Reverse String',
+        problemDescription: 'Given an input string, write a Java function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".',
+        stubCodePy: 'def reverse_string(s):\n  # Your code here\n  return ""',
+        stubCodeJs: 'function reverseString(s) {\n  // Your code here\n  return "";\n}',
+        stubCodeJava: 'class Solution {\n    public String reverseString(String s) {\n        // Your code here\n        return "";\n    }\n}',
+        stubCodeCpp: '#include <string>\n#include <algorithm>\n\nstd::string reverseString(std::string s) {\n  // Your code here\n  return "";\n}',
+        testCases: reverseStringTestCases,
       },
       {
         id: 20,
         lessonId: 26,
         type: 'CODE',
         order: 1,
-        question: 'JavaScript',
-        problemDescription: 'Given an input string, write a JavaScript function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".'
+        question: 'JavaScript Reverse String',
+        problemDescription: 'Given an input string, write a JavaScript function that returns the string reversed. For example, if the input is "hello", the output should be "olleh".',
+        stubCodePy: 'def reverse_string(s):\n  # Your code here\n  return ""',
+        stubCodeJs: 'function reverseString(s) {\n  // Your code here\n  return "";\n}',
+        stubCodeJava: 'class Solution {\n    public String reverseString(String s) {\n        // Your code here\n        return "";\n    }\n}',
+        stubCodeCpp: '#include <string>\n#include <algorithm>\n\nstd::string reverseString(std::string s) {\n  // Your code here\n  return "";\n}',
+        testCases: reverseStringTestCases,
       },
     ])
 

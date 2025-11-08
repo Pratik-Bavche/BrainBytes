@@ -16,6 +16,9 @@ export const challengeMatches = pgTable('challenge_matches', {
   playerOneCode: text('player_one_code'),
   playerTwoCode: text('player_two_code'),
 
+  playerOneLanguage: text('player_one_language'),
+  playerTwoLanguage: text('player_two_language'),
+
   status: matchStatusEnum('status').notNull().default('pending'),
   winnerId: text('winner_id').references(() => userProgress.userId, { onDelete: 'set null' }),
 

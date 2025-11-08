@@ -15,7 +15,19 @@ const pusher = new Pusher({
   useTLS: true,
 })
 
-export async function findOrJoinMatch(challengeId: number) {
+const languageToJudge0Id: Record<string, number> = {
+  'javascript': 93,
+  'python': 71,
+  'java': 62,
+  'cpp': 54,
+  'go': 60,
+  'rust': 73,
+  'typescript': 74,
+  'kotlin': 78,
+  'swift': 83,
+}
+
+export async function findOrJoinMatch(challengeId: number, language: string) {
   const user = await requireUser()
   const userId = user.id
 
@@ -44,6 +56,7 @@ export async function findOrJoinMatch(challengeId: number) {
     const [updatedMatch] = await db.update(challengeMatches)
       .set({
         playerTwoId: userId,
+        playerTwoLanguage: language,
         status: 'in_progress',
         startedAt: new Date(),
       })
@@ -60,6 +73,7 @@ export async function findOrJoinMatch(challengeId: number) {
       .values({
         challengeId,
         playerOneId: userId,
+        playerOneLanguage: language,
         status: 'pending',
       })
       .returning()
@@ -82,19 +96,31 @@ export async function submitP2PChallenge(matchId: number, code: string, language
     }
 
     if (match.status !== 'in_progress') {
+        if (match.status === 'completed') {
+            return { error: 'Match is already over.' };
+        }
         return { error: 'Match is not in progress.' };
     }
 
     const challenge = match.challenge;
-    if (!challenge || !challenge.testCases) {
-        throw new Error('Challenge data not found.');
+    // @ts-ignore
+    if (!challenge || !challenge.testCases || challenge.testCases.length === 0) {
+        throw new Error('Challenge data or test cases not found.');
     }
 
-    // TODO: Map your 'language' to Judge0's language_id
-    const judge0LanguageId = 71;
+    const judge0LanguageId = languageToJudge0Id[language];
+    if (!judge0LanguageId) {
+      return { error: `Language '${language}' is not supported for competition.` };
+    }
+    
+    if (match.playerOneId === userId) {
+      await db.update(challengeMatches).set({ playerOneCode: code }).where(eq(challengeMatches.id, matchId));
+    } else {
+      await db.update(challengeMatches).set({ playerTwoCode: code }).where(eq(challengeMatches.id, matchId));
+    }
 
+    // @ts-ignore
     const testCases = challenge.testCases as Array<{input: string, output: string}>;
-
     let allTestsPassed = true;
     const results = [];
 
@@ -116,6 +142,8 @@ export async function submitP2PChallenge(matchId: number, code: string, language
             });
 
             if (!response.ok) {
+                const errorBody = await response.text();
+                console.error("Judge0 API Error:", errorBody);
                 throw new Error(`Judge0 API error: ${response.statusText}`);
             }
 
@@ -134,46 +162,58 @@ export async function submitP2PChallenge(matchId: number, code: string, language
 
 
     if (allTestsPassed) {
-        const [updatedMatch] = await db.update(challengeMatches)
-            .set({
-                status: 'completed',
-                winnerId: userId,
-                endedAt: new Date()
-            })
-            .where(eq(challengeMatches.id, matchId))
-            .returning();
-
-        await db.update(userProgress)
-          .set({
-            points: sql`${userProgress.points} + 25`,
-            gems: sql`${userProgress.gems} + 1`
-          })
-          .where(eq(userProgress.userId, userId));
-
-        await pusher.trigger(`private-match-${matchId}`, 'match-over', {
-            winnerId: userId,
-            results: results
+        const finalMatchCheck = await db.query.challengeMatches.findFirst({
+            where: eq(challengeMatches.id, matchId),
+            columns: { status: true }
         });
 
-        revalidateTag(`get_user_progress::${userId}`);
-        revalidateTag(`get_user_progress::${match.playerOneId === userId ? match.playerTwoId : match.playerOneId}`);
+        if (finalMatchCheck?.status === 'in_progress') {
+            const [updatedMatch] = await db.update(challengeMatches)
+                .set({
+                    status: 'completed',
+                    winnerId: userId,
+                    endedAt: new Date()
+                })
+                .where(eq(challengeMatches.id, matchId))
+                .returning();
+
+            await db.update(userProgress)
+              .set({
+                points: sql`${userProgress.points} + 25`,
+                gems: sql`${userProgress.gems} + 1`
+              })
+              .where(eq(userProgress.userId, userId));
+
+            await pusher.trigger(`private-match-${matchId}`, 'match-over', {
+                winnerId: userId,
+                results: results
+            });
+
+            revalidateTag(`get_user_progress::${match.playerOneId}`);
+            if (match.playerTwoId) {
+                revalidateTag(`get_user_progress::${match.playerTwoId}`);
+            }
+        }
 
         return { success: true, results: results };
 
     } else {
-        await pusher.trigger(`private-match-${matchId}-user-${userId}`, 'submission-failed', {
-            results: results
-        });
-        return { success: false, results: results };
+        // await pusher.trigger(`private-match-${matchId}-user-${userId}`, 'submission-failed', {
+        //     results: results
+        // });
+        const failedResult = results.find(r => r.status.id !== 3);
+        const errorMessage = failedResult?.status?.description || 'Your solution failed one or more test cases.';
+        return { error: errorMessage, results: results };
     }
 }
 
-export async function sendProgressUpdate(matchId: number, code: string) {
+export async function sendProgressUpdate(matchId: number, code: string, language: string) {
   const user = await requireUser();
   const userId = user.id;
 
     await pusher.trigger(`private-match-${matchId}`, `opponent-progress`, {
         senderId: userId,
-        codeLength: code.length 
+        codeLength: code.length,
+        language: language
     });
 }
