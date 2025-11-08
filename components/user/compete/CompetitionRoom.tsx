@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useTransition } from 'react'
+import { useState, useEffect, useTransition, useRef } from 'react'
 import { ChallengeType, ChallengeMatchType } from '@/db/schema'
 import { findOrJoinMatch, submitP2PChallenge, sendProgressUpdate } from '@/actions/challengeMatch'
 import Editor from '@monaco-editor/react'
@@ -19,57 +19,54 @@ export function CompetitionRoom({ challenge }: Props) {
   const [code, setCode] = useState(challenge.stubCodeJs || '// Start coding here')
   const [opponentCodeLength, setOpponentCodeLength] = useState(0)
   const [winnerId, setWinnerId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [isSubmitting, startSubmission] = useTransition()
 
   const { user } = useUser(); 
   const userId = user?.id;
 
+  const findingRef = useRef(false);
+
   useEffect(() => {
-    if (!match || !userId) return;
+    if (findingRef.current) return;
+    if (status !== 'idle' || !challenge.id || error) return;
 
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
-      cluster: process.env.PUSHER_CLUSTER!,
-      authEndpoint: '/api/pusher/auth',
-      auth: {
-        params: { userId }
+    findingRef.current = true;
+    setStatus('waiting');
+    toast.loading('Finding an opponent...');
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const result: any = await findOrJoinMatch(challenge.id);
+        if (cancelled) return;
+
+        setMatch(result.match);
+
+        if (result.status === 'joined') {
+          setStatus('in_progress');
+          toast.success('Opponent found! The match has started.');
+        } else {
+          setStatus('waiting');
+          toast.dismiss();
+          toast('Waiting for an opponent to join...');
+        }
+      } catch (err: any) {
+        if (cancelled) return;
+        toast.error(err?.message ?? 'Failed to find a match');
+        setError(err?.message ?? String(err));
       }
-    });
-
-    const matchChannel = pusher.subscribe(`private-match-${match.id}`);
-
-    const userChannel = pusher.subscribe(`private-match-${match.id}-user-${userId}`);
-
-    matchChannel.bind('match-start', (data: { match: ChallengeMatchType }) => {
-      setMatch(data.match);
-      setStatus('in_progress');
-      toast.success('Opponent found! The match has started.');
-    });
-
-    matchChannel.bind('match-over', (data: { winnerId: string }) => {
-      setWinnerId(data.winnerId);
-      setStatus('completed');
-      toast.info(data.winnerId === userId ? 'You won!' : 'You lost!');
-    });
-
-    matchChannel.bind('opponent-progress', (data: { senderId: string, codeLength: number }) => {
-      if (data.senderId !== userId) {
-        setOpponentCodeLength(data.codeLength);
-      }
-    });
-
-    userChannel.bind('submission-failed', (data: { results: any[] }) => {
-       toast.error('Submission failed. Check your code and try again.');
-    });
+    })();
 
     return () => {
-      pusher.unsubscribe(`private-match-${match.id}`);
-      pusher.unsubscribe(`private-match-${match.id}-user-${userId}`);
-      pusher.disconnect();
-    }
-  }, [match, userId]);
+      cancelled = true;
+    };
+  }, [challenge.id, status, error]);
+
 
   useEffect(() => {
-    if (status === 'idle' && challenge.id) {
+    if (status === 'idle' && challenge.id && !error) {
       setStatus('waiting');
       toast.loading('Finding an opponent...');
       findOrJoinMatch(challenge.id)
@@ -86,10 +83,10 @@ export function CompetitionRoom({ challenge }: Props) {
         })
         .catch((err:any) => {
           toast.error(err.message);
-          setStatus('idle');
+          setError(err.message);
         });
     }
-  }, [status, challenge.id]);
+  }, [status, challenge.id, error]);
 
   const handleCodeChange = (value: string | undefined) => {
     if (value === undefined) return;
@@ -115,6 +112,18 @@ export function CompetitionRoom({ challenge }: Props) {
     });
   }
 
+  if (error) {
+    return (
+      <div className="text-center p-10">
+        <div className="text-2xl font-bold text-destructive">Error finding match</div>
+        <p className="text-muted-foreground">{error}</p>
+        <Button onClick={() => { setError(null); setStatus('idle'); }} variant="highlight" className="mt-4">
+          Try Again
+        </Button>
+      </div>
+    )
+  }
+
   if (status === 'waiting' || status === 'idle') {
     return (
       <div className="text-center p-10">
@@ -129,10 +138,10 @@ export function CompetitionRoom({ challenge }: Props) {
      return (
       <div className="text-center p-10">
         <div className="text-4xl font-bold mb-4">
-          {winnerId === userId ? '🎉 You Won! 🎉' : '😥 You Lost 😥'}
+          {winnerId === userId ? '脂 You Won! 脂' : '丼 You Lost 丼'}
         </div>
         <p>You gained 25 XP and 1 Gem!</p>
-        {/* TODO: Link back to /learn or /compete */}
+        {/* TODO: Link back to /compete */}
       </div>
      )
   }
