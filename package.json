@@ -18,6 +18,8 @@
     "db:update-users": "pnpm env:load pnpm tsx ./scripts/update-user-data.ts"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.29",
+    "@ai-sdk/react": "^2.0.89",
     "@auth0/nextjs-auth0": "^3.8.0",
     "@clerk/nextjs": "^5.1.3",
     "@monaco-editor/react": "^4.7.0",

@@ -8,6 +8,7 @@ import { HeartsModal } from '@/components/modals/hearts-modal'
 import { PracticeModal } from '@/components/modals/practice-modal'
 import { AppProviders } from '@/components/providers'
 import { sharedMetadata } from '@/config/metadata'
+import { Chatbot } from '@/components/chatbot/Chatbot'
 
 import { fonts } from '@/styles/fonts'
 import '@/styles/globals.css'
@@ -38,6 +39,7 @@ export default function RootLayout({
               <HeartsModal />
               <PracticeModal />
               {children}
+              <Chatbot />
               <Toaster position="top-right" richColors />
             </AppProviders>
           </ThemeProvider>
