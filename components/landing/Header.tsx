@@ -39,7 +39,9 @@ export function Header() {
           className="focus-visible group flex h-16 w-14 flex-col items-center gap-1 rounded-b-3xl bg-secondary/30 px-[6px] pt-2 text-2xl transition-colors hover:bg-primary/25 dark:bg-card dark:hover:bg-border/70 sm:size-32 sm:rounded-b-4xl sm:pt-4 sm:text-3xl lg:w-36 lg:text-4xl"
           title="BrainBytes app"
         >
-          <LogoSVG className="w-[1.5em] group-hover:animate-bounce" />
+          <div className="group-hover:animate-bounce">
+            <LogoSVG />
+          </div>
           <span className="font-display -tracking-widest max-sm:sr-only">BrainBytes</span>
         </NextLink>
         <div className="flex flex-1 items-center justify-end">
