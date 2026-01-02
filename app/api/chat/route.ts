@@ -128,7 +128,7 @@ export async function POST(req: Request) {
     body = await req.json()
   } catch (err) {
     console.error('[chat] Invalid JSON payload:', err)
-    return new NextResponse('Invalid JSON payload', { status: 400 })
+    return new NextResponse("Request body must be valid JSON with a 'messages' array", { status: 400 })
   }
 
   const messages = body?.messages
