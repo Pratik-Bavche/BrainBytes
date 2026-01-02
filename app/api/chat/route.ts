@@ -31,21 +31,184 @@ Always be cheerful and encouraging!
 Here is the question below:\n
 `;
 
+function extractTextFromMessage(first: any): string | undefined {
+  // Defensive: ensure we have an object
+  if (!first || typeof first !== 'object') return undefined
+
+  // Handle `parts` arrays (common in some AI SDK payloads)
+  if (Array.isArray(first.parts) && first.parts.length > 0) {
+    const partsText = first.parts.map((p: any) => (typeof p?.text === 'string' ? p.text : '')).join('\n').trim()
+    if (partsText) return partsText
+  }
+
+  // Handle `content` as string
+  if (typeof first.content === 'string' && first.content.trim()) {
+    return first.content.trim()
+  }
+
+  // Handle `content` as array (strings or objects)
+  if (Array.isArray(first.content) && first.content.length > 0) {
+    const contentText = first.content
+      .map((c: any) => {
+        if (typeof c === 'string') return c
+        if (typeof c?.text === 'string') return c.text
+        if (Array.isArray(c?.parts)) return c.parts.map((pp: any) => (typeof pp?.text === 'string' ? pp.text : '')).join('\n')
+        return ''
+      })
+      .join('\n')
+      .trim()
+    if (contentText) return contentText
+  }
+
+  // Legacy `text` field
+  if (typeof first.text === 'string' && first.text.trim()) {
+    return first.text.trim()
+  }
+
+  return undefined
+}
+
+function isValidMessage(first: any): boolean {
+  if (!first || typeof first !== 'object') return false
+
+function isValidMessage(message: any): boolean {
+  if (!message || typeof message !== 'object') return false
+
+  if (Array.isArray(message.parts) && message.parts.some((p: any) => typeof p?.text === 'string' && p.text.trim())) return true
+
+  if (typeof message.content === 'string' && message.content.trim()) return true
+
+  if (
+    Array.isArray(message.content) &&
+    message.content.some((c: any) =>
+      typeof c === 'string' || typeof c?.text === 'string' || (Array.isArray(c?.parts) && c.parts.some((pp: any) => typeof pp?.text === 'string'))
+    )
+  )
+    return true
+
+  if (typeof message.text === 'string' && message.text.trim()) return true
+
+  return false
+}
+
+function extractTextFromCandidate(candidate: any): string {
+  if (!candidate) return ''
+
+  if (Array.isArray(candidate.content?.parts)) {
+    return candidate.content.parts.map((p: any) => p.text ?? '').join('\n')
+  }
+
+  if (typeof candidate.content === 'string') {
+    return candidate.content
+  }
+
+  if (Array.isArray(candidate.content)) {
+    return candidate.content.map((c: any) => (typeof c === 'string' ? c : c?.text ?? '')).join('\n')
+  }
+
+  if (typeof candidate.content?.parts?.[0]?.text === 'string') {
+    return candidate.content.parts[0].text
+  }
+
+  if (typeof candidate.content?.[0]?.text === 'string') {
+    return candidate.content[0].text
+  }
+
+  return ''
+}
+
 export async function POST(req: Request) {
   // Require authentication before processing chat requests
   // This prevents unauthorized API usage and enables rate limiting per user
-  const user = await requireUser()
+  await requireUser()
 
-  const { messages } = await req.json();
-  console.log("Messages:", messages[0].parts[0].text);
+  // Parse and validate incoming JSON
+  let body: any
+  try {
+    body = await req.json()
+  } catch (err) {
+    console.error('[chat] Invalid JSON payload:', err)
+    return new NextResponse("Request body must be valid JSON with a 'messages' array", { status: 400 })
+  }
 
-  const result = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: systemPrompt + messages[0].parts[0].text,
-  });
+  const messages = body?.messages
 
-  const textResult = result.candidates![0].content?.parts![0].text;
-  console.log("Result:", textResult);
+  if (!Array.isArray(messages) || messages.length === 0) {
+    console.warn('[chat] Missing or invalid "messages" array')
+    return new NextResponse('Invalid messages: expected non-empty array', { status: 400 })
+  }
 
-  return new NextResponse(textResult);
+  const userMessage = messages[0]
+
+  // Validate message structure before attempting to extract text
+  if (!isValidMessage(userMessage)) {
+    console.warn('[chat] Invalid message structure', { sample: userMessage })
+    return new NextResponse(
+      "Invalid message structure: message must include text content in a supported field such as 'content', 'text', or 'parts'",
+      { status: 400 },
+    )
+  }
+
+  const userText = extractTextFromMessage(userMessage)
+
+  if (!userText) {
+    console.warn('[chat] No message text found in the provided message structure')
+    return new NextResponse('Invalid message: contains no non-empty text content', { status: 400 })
+  }
+
+  console.log('Messages text:', userText)
+
+  // Call the AI model
+  let result: any
+  try {
+    result = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: systemPrompt + userText,
+    })
+  } catch (err: unknown) {
+    console.error('[chat] AI generation failed:', err)
+
+    let userMessage = 'AI generation failed due to an internal error. Please try again.'
+
+    if (err && typeof err === 'object') {
+      const anyErr = err as any
+      const statusCode = anyErr.status ?? anyErr.statusCode
+      const errorMessage = typeof anyErr.message === 'string' ? anyErr.message : ''
+
+      if (statusCode === 429) {
+        userMessage =
+          'AI generation failed because the rate limit was exceeded. Please wait a moment and try again.'
+      } else if (typeof statusCode === 'number' && statusCode >= 500) {
+        userMessage =
+          'AI generation failed because the AI service is temporarily unavailable. Please try again later.'
+      } else if (typeof statusCode === 'number' && statusCode >= 400) {
+        userMessage =
+          'AI generation failed due to invalid input to the AI service. Please check your request and try again.'
+      } else if (errorMessage.toLowerCase().includes('timeout')) {
+        userMessage =
+          'AI generation failed because the request to the AI service timed out. Please try again.'
+      }
+    }
+
+    return new NextResponse(userMessage, { status: 500 })
+  }
+
+  // Safely extract the text from the response
+  let textResult = ''
+  if (Array.isArray(result?.candidates) && result.candidates.length > 0) {
+    textResult = extractTextFromCandidate(result.candidates[0])
+  } else if (result?.candidate) {
+    textResult = extractTextFromCandidate(result.candidate)
+  } else if (typeof result?.content === 'string') {
+    textResult = result.content
+  }
+
+  // If we could not extract any usable text, treat this as an upstream AI error
+  if (!textResult || !textResult.trim()) {
+    console.error('[chat] AI returned an empty or invalid response text')
+    return new NextResponse('AI returned an empty response', { status: 502 })
+  }
+  console.log('Result:', textResult)
+
+  return new NextResponse(textResult)
 }
