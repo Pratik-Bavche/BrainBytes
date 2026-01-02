@@ -3,14 +3,19 @@
 
 <div style="margin: 15px 0;" align="center">
     <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FF0000&width=435&lines=Welcome+to+BrainBytes"/></a>
-  </div>
+</div>
+
+<div style="margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; text-align: center;">
+  <h3 style="color: white; margin: 0; font-size: 1.3em;">🚀 Transform Your Coding Journey with Gamified Learning</h3>
+  <p style="color: #f0f0f0; margin: 10px 0 0 0;">Master Data Structures & Algorithms through interactive challenges, blockchain rewards, and real-time competitions</p>
+</div>
   
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 <div align="left">
 A gamified, interactive platform designed to make learning Data Structures and Algorithms (DSA) engaging and effective. This project combines a Next.js frontend with a robust backend, featuring courses, quizzes, a real-time PvP mode, blockchain rewards, and a community forum. 🧠💻🏆
 
-[Report Bug](https://github.com/GauravKarakoti/BrainBytes/issues) • [Request Feature](https://github.com/GauravKarakoti/BrainBytes/issues)
+**Quick Links:** [Report Bug](https://github.com/GauravKarakoti/BrainBytes/issues) • [Request Feature](https://github.com/GauravKarakoti/BrainBytes/issues) • [Documentation](#table-of-contents) • [Live Demo](#deployment)
 
 </div>
 <table align="left">
@@ -34,213 +39,469 @@ A gamified, interactive platform designed to make learning Data Structures and A
     </tbody>
 </table>
 
+<div style="margin-top: 20px;">
+    <h3>📊 Repository Overview</h3>
+    <p>
+        <a href="https://github.com/GauravKarakoti/BrainBytes"><img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge&logo=github"/></a>
+        <a href="https://github.com/GauravKarakoti/BrainBytes"><img src="https://img.shields.io/badge/Status-Active%20Development-green?style=for-the-badge&logo=github"/></a>
+        <a href="https://github.com/GauravKarakoti/BrainBytes/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge"/></a>
+    </p>
+</div>
+
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
- 
-## 🎯Vision
+
+## 📋 Table of Contents
+- [🎯 Vision](#vision)
+- [✨ Features](#features-that-shine)
+- [🏗️ Architecture](#architecture)
+- [🛠️ Tech Stack](#tech-stack)
+- [📚 Learning Paths](#learning-paths)
+- [🚀 Getting Started](#getting-started)
+- [🔄 CI/CD Pipelines](#cicd-pipelines)
+- [🤝 Contributing](#contributing)
+- [💙 Contributors](#contributors)
+
+ <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
+## 🎯 Vision
 To create an engaging, modern, and comprehensive platform for learning programming fundamentals. BrainBytes aims to make education in complex topics like Data Structures and Algorithms accessible and fun through gamification, interactive challenges, and community support.
 
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 ## ✨ Features That Shine
 
-- ****Gamified Learning**: Users earn points, gems, and hearts to stay motivated. A leveling system tracks overall mastery.
+BrainBytes is packed with powerful features to enhance your learning experience:
 
-- ****Interactive Quizzes**: Lessons are reinforced with multiple-choice quizzes that provide instant feedback.
+### 🎮 Learning & Engagement
+- **Gamified Learning**: Users earn points, gems, and hearts to stay motivated. A leveling system tracks overall mastery.
+- **Interactive Quizzes**: Lessons are reinforced with multiple-choice quizzes that provide instant feedback.
+- **Structured Curriculum**: Learning is organized into courses (e.g., Python, JavaScript), which are broken down into units and then lessons.
+- **Quests & Milestones**: Daily, weekly, and long-term quests provide users with goals and reward them with points and gems.
 
-- ****Coding Challenges (PvP)**: Compete against other users in real-time coding battles/page.tsx, actions/challengeMatch.ts`]. Submissions are tested against multiple test cases using Judge0.
+### ⚡ Competitive Features
+- **Coding Challenges (PvP)**: Compete against other users in real-time coding battles. Submissions are tested against multiple test cases using Judge0.
+- **Leaderboard**: A global leaderboard ranks users by their accumulated points (XP).
+- **Real-time Multiplayer**: Live PvP matches with instant feedback using Pusher.
 
-- ****Blockchain Rewards**: Integrated with a custom ERC20 "BYTE" token on the Sepolia testnet. Users can mint tokens for completing challenges and spend them in the shop.
+### 💎 Web3 & Rewards
+- **Blockchain Rewards**: Integrated with a custom ERC20 "BYTE" token on the Sepolia testnet. Users can mint tokens for completing challenges and spend them in the shop.
+- **Wallet Integration**: Connect MetaMask or other wallets using Wagmi to manage and spend BYTE tokens.
+- **In-App Shop**: Users can spend their collected gems or BYTE tokens on items like heart refills or vouchers.
 
-- ****Wallet Integration**: Connect MetaMask or other wallets using Wagmi to manage and spend BYTE tokens.
+### 🌐 Community & Support
+- **Community Forum**: A built-in forum for users to ask questions, share solutions, and interact with the community.
+- **Real-time Chat**: Engage with community members through real-time messaging powered by Pusher.
 
-- ****Structured Curriculum**: Learning is organized into courses (e.g., Python, JavaScript), which are broken down into units and then lessons.
+### 🔐 Platform Features
+- **Authentication**: Secure user authentication and management handled by Auth0.
+- **Admin Dashboard**: A separate admin interface built with React-Admin for managing courses, units, lessons, and challenges.
+- **Automated CI/CD Pipelines**: Comprehensive GitHub Actions workflows for continuous integration, ensuring code quality, contract validation, and database schema consistency on every pull request.
+- **Analytics & Insights**: Track your progress with detailed analytics and performance metrics.
 
-- ****Leaderboard**: A global leaderboard ranks users by their accumulated points (XP).
+ <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
-- ****Quests & Milestones**: Daily, weekly, and long-term quests provide users with goals and reward them with points and gems.
+## 🏗️ Architecture
 
-- ****In-App Shop**: Users can spend their collected gems or BYTE tokens on items like heart refills or vouchers.
+BrainBytes follows a modern, scalable architecture:
 
-- ****Community Forum**: A built-in forum for users to ask questions, share solutions, and interact with the community.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                       Frontend Layer                             │
+│  Next.js 14 + React + TypeScript + Tailwind CSS + Framer Motion │
+│        shadcn/ui Components + Real-time Updates (Pusher)        │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+┌────────────────────────────▼────────────────────────────────────┐
+│                  API Layer (Next.js API Routes)                  │
+│  Auth0 Integration │ Code Execution │ Blockchain │ Pusher Events│
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+┌────────────────────────────▼────────────────────────────────────┐
+│                    Data & Services Layer                         │
+│  Drizzle ORM + PostgreSQL │ Judge0 │ Blockchain (Hardhat)       │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+┌────────────────────────────▼────────────────────────────────────┐
+│                    External Services                             │
+│  Neon (Database) │ Auth0 │ Pusher │ Wagmi (Web3) │ Judge0       │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-- ****Authentication**: Secure user authentication and management handled by `Auth0/route.ts`.
-
-- ****Admin Dashboard**: A separate admin interface built with React-Admin for managing courses, units, lessons, and challenges.
-
-- ****Automated CI/CD Pipelines**: Comprehensive GitHub Actions workflows for continuous integration, ensuring code quality, contract validation, and database schema consistency on every pull request.
+### Project Structure
+- **`/app`** - Next.js App Router pages and layouts
+- **`/components`** - Reusable React components (UI, Admin, Landing, Chat)
+- **`/actions`** - Server actions and API handlers
+- **`/db`** - Drizzle ORM schema and queries
+- **`/lib`** - Utility functions and helper libraries
+- **`/contracts`** - Smart contracts (ByteToken ERC20)
+- **`/scripts`** - Database seeding and deployment scripts
+- **`/config`** - Application configuration (courses, quests, shop, languages)
 
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 ## 🛠️ Tech Stack
-- **Frontend**: [Next.js (App Router)](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/)
 
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/), [Vaul](https://vaul.emilbaehr.com/) (drawers)
-
-- **Animation**: [Framer Motion](https://www.framer.com/motion/)
-
-- **Backend**: [Next.js (API Routes)](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
-
-- **Database**: [PostgreSQL](https://www.postgresql.org/) (powered by [Neon](https://neon.tech/))
-
-- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
-
-- **Authentication**: [Auth0](https://auth0.com/)
-
-- **Real-time (PvP & Forum)**: [Pusher](https://pusher.com/)
-
-- **Blockchain**: [Solidity](https://soliditylang.org/), [Hardhat](https://hardhat.org/), [Ethers.js](https://ethers.org/), [Wagmi](https://wagmi.sh/)
-
-- **Code Execution (PvP)**: [Judge0](https://judge0.com/)
-
-- **Deployment**: [Vercel](https://vercel.com/)
-
-- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
+| Category | Technology |
+|----------|-----------|
+| **Frontend** | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion |
+| **UI Components** | shadcn/ui, Radix UI, Lucide Icons, Vaul (Drawers) |
+| **Backend** | Next.js API Routes, Server Actions |
+| **Database** | PostgreSQL (Neon), Drizzle ORM |
+| **Authentication** | Auth0 with NextAuth.js |
+| **Real-time** | Pusher (PvP, Forum, Chat) |
+| **Blockchain** | Solidity, Hardhat, Ethers.js, Wagmi, OpenZeppelin Contracts |
+| **Code Execution** | Judge0 API (for PvP code testing) |
+| **Code Editor** | Monaco Editor |
+| **State Management** | TanStack React Query, Zustand (Custom Hooks) |
+| **Utilities** | clsx, class-variance-authority, dotenv |
+| **AI Integration** | Google GenAI SDK, Vercel AI SDK |
+| **Analytics** | Vercel Analytics, Speed Insights |
+| **Deployment** | Vercel |
+| **CI/CD** | GitHub Actions |
+| **Payments** | Stripe (optional) |
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+## 📚 Learning Paths
 
+BrainBytes offers structured learning paths for multiple programming languages:
+
+### 🐍 Python DSA Mastery
+Learn Data Structures and Algorithms using Python with interactive lessons and challenges.
+- **Units**: Arrays, Linked Lists, Stacks, Queues, Trees, Graphs, Dynamic Programming
+- **Total Challenges**: 50+
+- **Difficulty Progression**: Beginner → Intermediate → Advanced
+
+### 🟨 JavaScript/TypeScript
+Master DSA concepts using JavaScript/TypeScript for both frontend and competitive programming.
+- **Units**: Core Concepts, Advanced Data Structures, Optimization Techniques
+- **Interactive PvP Challenges**: Real-time coding battles
+- **Browser-based IDE**: Practice directly in your browser
+
+### 🌐 Multi-Language Support
+Each course supports learning in your preferred language with localization features.
+
+### 🎯 Quest System
+- **Daily Quests**: Quick challenges for daily practice
+- **Weekly Quests**: Longer problems with higher rewards
+- **Seasonal Quests**: Special themed challenges with exclusive rewards
+
+ <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 ## 🚀 Getting Started
 Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-**Prerequisites**
+### ✅ Prerequisites
 - [Node.js](https://nodejs.org/en) (v18 or higher)
-
-- [pnpm](https://pnpm.io/installation)
-
+- [pnpm](https://pnpm.io/installation) (Fast, disk space efficient package manager)
 - [PostgreSQL](https://www.postgresql.org/) database (e.g., via [Neon](https://neon.tech/))
+- [Auth0](https://auth0.com/) account (for authentication)
+- [Pusher](https://pusher.com/) account (for real-time features)
+- [Judge0](https://judge0.com/) API Key (optional, for PvP code execution)
+- [MetaMask](https://metamask.io/) or Web3 wallet (optional, for blockchain features)
 
-- [Auth0](https://auth0.com/) account
+### 📦 Installation
 
-- [Pusher](https://pusher.com/) account
-
-- [Judge0](https://judge0.com/) API Key (optional, for PvP)
-
-**Installation**
-1. Clone the repository:
-
-```Bash
+**Step 1: Clone the repository**
+```bash
 git clone https://github.com/GauravKarakoti/BrainBytes.git
 cd BrainBytes
 ```
-2. Install dependencies:
 
-```Bash
+**Step 2: Install dependencies**
+```bash
 pnpm install
 ```
-3. Set up environment variables: Create a .env file in the root directory by copying the example file:
 
-```Bash
+**Step 3: Set up environment variables**
+Create a `.env` file in the root directory by copying the example file:
+```bash
 cp .env.example .env
 ```
-4. Now, fill in the .env file with your credentials:
 
-- `DATABASE_URL` (from Neon)
+**Step 4: Configure your `.env` file**
+Fill in the following variables:
+```env
+# Database (from Neon)
+DATABASE_URL=your_neon_database_url
 
-- Auth0 variables (`AUTH0_SECRET`, `AUTH0_BASE_URL`, etc.)
+# Auth0 Configuration
+AUTH0_SECRET=your_auth0_secret
+AUTH0_BASE_URL=http://localhost:3000
+AUTH0_ISSUER_BASE_URL=https://your-domain.auth0.com
+AUTH0_CLIENT_ID=your_client_id
+AUTH0_CLIENT_SECRET=your_client_secret
+AUTH0_ADMIN_EMAILS=your_email@example.com
 
-- Pusher variables (`NEXT_PUBLIC_PUSHER_APP_KEY`, `PUSHER_APP_ID`, etc.)
+# Pusher (Real-time)
+NEXT_PUBLIC_PUSHER_APP_KEY=your_pusher_key
+PUSHER_APP_ID=your_pusher_id
+PUSHER_SECRET=your_pusher_secret
+PUSHER_CLUSTER=your_cluster
 
-- Blockchain variables (create a Sepolia RPC URL and a private key for deployment/minting)
+# Blockchain (Sepolia Testnet)
+NEXT_PUBLIC_BYTE_TOKEN_ADDRESS=contract_address
+NEXT_PUBLIC_SHOP_WALLET_ADDRESS=shop_wallet_address
+NEXT_PUBLIC_SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
+PRIVATE_KEY=your_private_key
 
-- `AUTH0_ADMIN_EMAILS` (your email, to access the admin panel)
+# Judge0 (Code Execution - Optional)
+NEXT_PUBLIC_JUDGE0_HOST=https://judge0-api.com
+JUDGE0_API_KEY=your_judge0_key
 
-- (Optional) `NEXT_PUBLIC_JUDGE0_HOST`, `JUDGE0_API_KEY`
+# Google AI (Chat features)
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_ai_key
+```
 
-4. Run database migrations: This will sync your database schema with the Drizzle schema.
-
-```Bash
+**Step 5: Run database migrations**
+Sync your database schema with the Drizzle schema:
+```bash
 pnpm db:push
 ```
-5. Seed the database: This will populate your database with initial courses, units, lessons, and quests.
 
-```Bash
+**Step 6: Seed the database**
+Populate your database with initial courses, units, lessons, and quests:
+```bash
 pnpm db:seed
 ```
-6.Deploy Smart Contract (Optional, for Blockchain features): If you want to test the blockchain features, you need to deploy the ByteToken contract to a testnet (like Sepolia).
 
-```Bash
-# This looks like the correct script to deploy the ByteToken
+**Step 7: Deploy Smart Contract (Optional)**
+If you want to test the blockchain features, deploy the ByteToken contract to Sepolia:
+```bash
 pnpm env:load pnpm tsx ./scripts/deploy.ts
 ```
-After running, copy the output contract address to `NEXT_PUBLIC_BYTE_TOKEN_ADDRESS` and `NEXT_PUBLIC_SHOP_WALLET_ADDRESS` (or use a separate wallet for the shop) in your `.env` file.
+After running, copy the output contract address to `NEXT_PUBLIC_BYTE_TOKEN_ADDRESS` and `NEXT_PUBLIC_SHOP_WALLET_ADDRESS` in your `.env` file.
 
-7. Run the development server:
-```Bash
+**Step 8: Run the development server**
+```bash
 pnpm dev
 ```
-The application should now be running at http://localhost:3000.
+The application should now be running at **http://localhost:3000** 🎉
+
+### 🔧 Available Scripts
+```bash
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+pnpm lint             # Run ESLint
+pnpm db:push          # Push schema to database
+pnpm db:migrate       # Run migrations
+pnpm db:studio        # Open Drizzle Studio (database GUI)
+pnpm db:seed          # Seed database with initial data
+pnpm db:update-users  # Update user statistics
+```
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
 ## 🔄 CI/CD Pipelines
 
-We use GitHub Actions to automate quality checks and ensure code reliability. The following workflows are triggered on every pull request:
+We use **GitHub Actions** to automate quality checks and ensure code reliability. The following workflows are triggered on every pull request:
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+<div style="padding: 15px; border: 1px solid #667eea; border-radius: 8px; background: #f9f9f9;">
 
 ### 🌐 Web Application CI
 **File**: `.github/workflows/web-app-ci.yml`
 
-Runs on every pull request to ensure the Next.js application is error-free before merging.
-- **Linting**: Validates code style with ESLint
-- **Type Checking**: Performs TypeScript type checking with `pnpm tsc --noEmit`
-- **Build Verification**: Ensures the application builds successfully with `pnpm build`
+Ensures the Next.js application is error-free before merging.
+- ✅ **Linting**: ESLint validation
+- ✅ **Type Checking**: TypeScript `tsc --noEmit`
+- ✅ **Build Verification**: `pnpm build` success
 
-Triggered on: Pull requests and pushes to `main` and `develop` branches
+**Triggers**: Pull requests, pushes to `main`/`develop`
+
+</div>
+
+<div style="padding: 15px; border: 1px solid #667eea; border-radius: 8px; background: #f9f9f9;">
 
 ### 🔗 Smart Contract CI
 **File**: `.github/workflows/smart-contract-ci.yml`
 
-Validates Solidity smart contracts (ByteToken.sol) and prevents breaking changes.
-- **Compilation**: Compiles contracts with Hardhat
-- **Unit Tests**: Runs contract tests with `pnpm hardhat test`
-- **Coverage Report**: Generates test coverage metrics (non-blocking)
+Validates Solidity smart contracts and prevents breaking changes.
+- ✅ **Compilation**: Hardhat compilation
+- ✅ **Unit Tests**: Contract test suite
+- ✅ **Coverage Report**: Test coverage metrics
 
-Triggered on: Changes to `contracts/`, `hardhat.config.ts`, or `test/` directories
+**Triggers**: Changes to `contracts/`, `hardhat.config.ts`, `test/`
+
+</div>
+
+<div style="padding: 15px; border: 1px solid #667eea; border-radius: 8px; background: #f9f9f9;">
 
 ### 🗄️ Database Schema Verification
 **File**: `.github/workflows/database-schema-ci.yml`
 
-Prevents "schema drift" by validating Drizzle ORM schema consistency and migration integrity.
-- **Schema Validation**: Checks schema consistency with `pnpm drizzle-kit check`
-- **Migration Generation**: Generates migrations from schema changes
-- **Migration Testing**: Verifies migrations can be applied to a test database
-- **PostgreSQL Integration**: Uses a test PostgreSQL 16 instance
+Prevents "schema drift" by validating Drizzle ORM consistency.
+- ✅ **Schema Validation**: `pnpm drizzle-kit check`
+- ✅ **Migration Generation**: Auto-generate from changes
+- ✅ **Migration Testing**: Test on PostgreSQL 16
+- ✅ **Integrity Checks**: Ensure no breaking changes
 
-Triggered on: Changes to `db/schema/`, `drizzle.config.ts`, or `drizzle/` migration files
+**Triggers**: Changes to `db/schema/`, `drizzle.config.ts`, `drizzle/`
+
+</div>
+
+<div style="padding: 15px; border: 1px solid #667eea; border-radius: 8px; background: #f9f9f9;">
+
+### 🚀 Deployment Pipeline
+**File**: `.github/workflows/deploy.yml`
+
+Automatic deployment to Vercel on successful merge to main.
+- 📤 **Build & Deploy**: Production build to Vercel
+- 🔍 **Post-deployment Checks**: Health checks
+- 📊 **Performance Monitoring**: Vercel Analytics
+
+**Triggers**: Push to `main` branch
+
+</div>
+
+</div>
 
 ### Running Workflows Locally
 
-To test CI/CD workflows locally before pushing:
+Test CI/CD workflows locally before pushing:
 
 ```bash
-# Install act to run GitHub Actions locally
+# Install act (GitHub Actions local runner)
 brew install act
 
 # Run all workflows
 act
 
 # Run a specific workflow
-act -j compile-and-test
+act -j web-app-ci
+
+# Run with specific GitHub token
+act -s GITHUB_TOKEN=your_token
 ```
 
-For more information about the CI/CD setup, refer to the [GitHub Actions documentation](https://docs.github.com/en/actions).
+For more information, see [GitHub Actions documentation](https://docs.github.com/en/actions).
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
- 
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Here's how you can help:
+
+### How to Contribute
+
+1. **Fork the Repository**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/BrainBytes.git
+   ```
+
+2. **Create a Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Make Your Changes**
+   - Write clean, well-documented code
+   - Follow the existing code style
+   - Add tests for new features
+
+4. **Commit Your Changes**
+   ```bash
+   git commit -m "feat: Add your feature description"
+   ```
+
+5. **Push to Your Fork**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. **Create a Pull Request**
+   - Provide a clear description of your changes
+   - Reference any related issues
+   - Ensure all CI checks pass
+
+### Development Guidelines
+- Follow TypeScript strict mode
+- Use ESLint for code quality
+- Write meaningful commit messages
+- Add comments for complex logic
+- Test thoroughly before submitting PR
+
+### Areas We Need Help With
+- 🎨 UI/UX Improvements
+- 📱 Mobile Responsiveness
+- 🌐 New Language Support
+- 🐛 Bug Fixes
+- 📚 Documentation
+- ⚡ Performance Optimization
+- 🔐 Security Enhancements
+
+Please check [CONTRIBUTING.md](./CONTRIBUTING.md) for more details and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) for our community guidelines.
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
 <div align="left">
-  <h2 style="font-size:3rem;">Contributors <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Red Heart" width="40" height="40" /></h2>
+  <h2 style="font-size:3rem;">💙 Contributors <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Red Heart" width="40" height="40" /></h2>
   
   <h3>Thanks to these amazing people who have contributed to the BrainBytes project:</h3>
 <p align="left">
     <img src="https://api.vaunt.dev/v1/github/entities/GauravKarakoti/repositories/BrainBytes/contributors?format=svg&limit=54" width="1000" />
 </p>
-<p style="font-family:var(--ff-philosopher);font-size:3rem;"><b> Show some <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Red Heart" width="40" height="40" /> by starring this awesome repository!
-</p>
+
+### 🌟 How to Become a Contributor
+
+If you see something that can be improved or want to add a new feature:
+
+1. **Check the [Issues](https://github.com/GauravKarakoti/BrainBytes/issues)** for open problems
+2. **Fork and create a branch** for your feature
+3. **Submit a Pull Request** with a clear description
+4. **Join our community** and help others!
+
+Every contribution, no matter how small, makes a difference! 🙌
+
+<p style="font-family:var(--ff-philosopher);font-size:2rem;"><b> Show some <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Red Heart" width="40" height="40" /> by starring this awesome repository!
  </div>
 
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
- 
-**🚀 Level Up Your Coding Skills – One Byte at a Time! 🧠💻🏆**
 
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
+
+## 🔗 Resources & Links
+
+- **Live Demo**: [BrainBytes](https://brainbytes.vercel.app)
+- **Documentation**: [Docs](./docs)
+- **GitHub Issues**: [Report a Bug](https://github.com/GauravKarakoti/BrainBytes/issues)
+- **GitHub Discussions**: [Join Community](https://github.com/GauravKarakoti/BrainBytes/discussions)
+- **Author**: [Gaurav Karakoti](https://github.com/GauravKarakoti)
+
+## 🙏 Acknowledgments
+
+- **shadcn/ui** for beautiful, accessible components
+- **Vercel** for hosting and analytics
+- **Neon** for serverless PostgreSQL
+- **Auth0** for secure authentication
+- **Pusher** for real-time infrastructure
+- **Judge0** for code execution
+- **The Open Source Community** for amazing tools and inspiration
+
+## 📞 Support
+
+If you have questions or need help:
+- 💬 Open an [Issue](https://github.com/GauravKarakoti/BrainBytes/issues)
+- 💭 Start a [Discussion](https://github.com/GauravKarakoti/BrainBytes/discussions)
+- 📧 Reach out to the maintainers
+
+---
+
+<div align="center">
+  <h3>⭐ Star us on GitHub! ⭐</h3>
+  <p>If you find BrainBytes helpful, please give it a star! It helps us grow and motivates us to keep improving.</p>
+  
+  <a href="https://github.com/GauravKarakoti/BrainBytes">
+    <img src="https://img.shields.io/github/stars/GauravKarakoti/BrainBytes?style=social&label=Star" alt="GitHub stars"/>
+  </a>
+</div>
 
  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
-[🔝 Back to Top](#top)
+**🚀 Level Up Your Coding Skills – One Byte at a Time! 🧠💻🏆**
+
+ <img src="https://user-images.githubusercontent.com/74038100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
+[🔝 Back to Top](#brainbytes)
