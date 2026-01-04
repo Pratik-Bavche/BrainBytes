@@ -103,8 +103,8 @@ jobs:
           sarif_file: 'trivy-results.sarif'
           category: 'trivy'
       
-      - name: Run npm audit
-        run: npm audit --audit-level=moderate
+      - name: Run npm audit (stricter)
+        run: npm audit --audit-level=low
         continue-on-error: true
   
   code-quality:
