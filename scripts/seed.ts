@@ -115,6 +115,13 @@ const main = async () => {
         courseId: 4,
         order: 2,
       },
+      {
+        id: 10,
+        title: 'Unit 3: Concurrency & Multithreading',
+        description: 'Learn Java concurrency and multithreading concepts.',
+        courseId: 4,
+        order: 3,
+      },
     ])
 
     await db.insert(schema.lessons).values([
@@ -282,6 +289,25 @@ const main = async () => {
         unitId: 9,
         order: 3,
         title: 'Streams & Lambda',
+      },
+      // Java - Unit 3
+      {
+        id: 27,
+        unitId: 10,
+        order: 1,
+        title: 'Threads & Runnable',
+      },
+      {
+        id: 28,
+        unitId: 10,
+        order: 2,
+        title: 'Synchronization',
+      },
+      {
+        id: 29,
+        unitId: 10,
+        order: 3,
+        title: 'Concurrent Collections',
       },
     ])
 
@@ -485,6 +511,51 @@ int main() {
         type: 'SELECT',
         order: 2,
         question: 'Can an interface have constructors?',
+      },
+      // Java - Lesson 27: Threads & Runnable
+      {
+        id: 21,
+        lessonId: 27,
+        type: 'SELECT',
+        order: 1,
+        question: 'Which interface should a class implement to be executed by a thread?',
+      },
+      {
+        id: 22,
+        lessonId: 27,
+        type: 'SELECT',
+        order: 2,
+        question: 'What method is called when a thread starts execution?',
+      },
+      // Java - Lesson 28: Synchronization
+      {
+        id: 23,
+        lessonId: 28,
+        type: 'SELECT',
+        order: 1,
+        question: 'Which keyword is used to synchronize a method in Java?',
+      },
+      {
+        id: 24,
+        lessonId: 28,
+        type: 'SELECT',
+        order: 2,
+        question: 'What does synchronization prevent in multithreaded programs?',
+      },
+      // Java - Lesson 29: Concurrent Collections
+      {
+        id: 25,
+        lessonId: 29,
+        type: 'SELECT',
+        order: 1,
+        question: 'Which package contains thread-safe collections in Java?',
+      },
+      {
+        id: 26,
+        lessonId: 29,
+        type: 'SELECT',
+        order: 2,
+        question: 'What is the advantage of ConcurrentHashMap over synchronized HashMap?',
       },
       // CODE Challenges
       {
@@ -938,6 +1009,156 @@ int main() {
         id: 48,
         challengeId: 16,
         option: 'Only private ones',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 21: Runnable interface
+      {
+        id: 49,
+        challengeId: 21,
+        option: 'Runnable',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 50,
+        challengeId: 21,
+        option: 'Thread',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 51,
+        challengeId: 21,
+        option: 'Callable',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 22: Thread start method
+      {
+        id: 52,
+        challengeId: 22,
+        option: 'run()',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 53,
+        challengeId: 22,
+        option: 'start()',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 54,
+        challengeId: 22,
+        option: 'execute()',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 23: Synchronization keyword
+      {
+        id: 55,
+        challengeId: 23,
+        option: 'synchronized',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 56,
+        challengeId: 23,
+        option: 'volatile',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 57,
+        challengeId: 23,
+        option: 'static',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 24: Synchronization prevents
+      {
+        id: 58,
+        challengeId: 24,
+        option: 'Race conditions',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 59,
+        challengeId: 24,
+        option: 'Memory leaks',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 60,
+        challengeId: 24,
+        option: 'Null pointer exceptions',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 25: Thread-safe collections package
+      {
+        id: 61,
+        challengeId: 25,
+        option: 'java.util.concurrent',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 62,
+        challengeId: 25,
+        option: 'java.util',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 63,
+        challengeId: 25,
+        option: 'java.lang',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      // Challenge 26: ConcurrentHashMap advantage
+      {
+        id: 64,
+        challengeId: 26,
+        option: 'Better performance under high concurrency',
+        correct: true,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 65,
+        challengeId: 26,
+        option: 'Allows null keys and values',
+        correct: false,
+        imageSrc: null,
+        audioSrc: null,
+      },
+      {
+        id: 66,
+        challengeId: 26,
+        option: 'Maintains insertion order',
         correct: false,
         imageSrc: null,
         audioSrc: null,
