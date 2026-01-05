@@ -24,7 +24,19 @@ const SUBSCRIPTION_PRICE_CENTS = (() => {
 
   return parsed;
 })();
-const SUBSCRIPTION_CURRENCY = process.env.STRIPE_SUBSCRIPTION_CURRENCY ?? "USD";
+const RAW_SUBSCRIPTION_CURRENCY =
+  process.env.STRIPE_SUBSCRIPTION_CURRENCY ?? "USD";
+const SUBSCRIPTION_CURRENCY = (() => {
+  const normalized = RAW_SUBSCRIPTION_CURRENCY.toLowerCase();
+  // Basic validation: must be a 3-letter ISO-style currency code
+  if (!/^[a-z]{3}$/.test(normalized)) {
+    throw new Error(
+      `Invalid STRIPE_SUBSCRIPTION_CURRENCY value "${RAW_SUBSCRIPTION_CURRENCY}". ` +
+        "Expected a 3-letter ISO currency code (e.g., 'usd')."
+    );
+  }
+  return normalized;
+})();
 const rawSubscriptionInterval = process.env.STRIPE_SUBSCRIPTION_INTERVAL;
 const SUBSCRIPTION_INTERVAL: "month" | "year" =
   rawSubscriptionInterval === "month" || rawSubscriptionInterval === "year"
