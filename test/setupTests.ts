@@ -16,7 +16,13 @@ globalThis.ResizeObserver = ResizeObserverMock
 
 // Mock IntersectionObserver
 class IntersectionObserverMock {
-  constructor() {}
+  private callback: IntersectionObserverCallback
+  private options?: IntersectionObserverInit
+
+  constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+    this.callback = callback
+    this.options = options
+  }
   observe() {}
   unobserve() {}
   disconnect() {}
