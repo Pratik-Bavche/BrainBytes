@@ -66,6 +66,7 @@ export function SubscriptionCard({ isActive, isCryptoSubscription }: Subscriptio
 
         const tx = await contract.transfer(SHOP_WALLET_ADDRESS, amount)
 
+        toast.dismiss()
         toast.loading("Processing transaction...")
         await tx.wait()
 
