@@ -58,12 +58,22 @@ export const createStripeUrl = async () => {
 export const getSubscriptionStatus = async (): Promise<{
   isActive: boolean
   isCryptoSubscription: boolean
-  subscriptionType: 'stripe' | 'crypto'
+  subscriptionType: 'stripe' | 'crypto' | 'none'
 }> => {
   const userSubscription = await getUserSubscription();
+  const isActive = Boolean(userSubscription?.isActive);
+  const isCryptoSubscription = Boolean(userSubscription?.isCryptoSubscription);
+
+  const subscriptionType: 'stripe' | 'crypto' | 'none' =
+    !userSubscription || !isActive
+      ? 'none'
+      : isCryptoSubscription
+        ? 'crypto'
+        : 'stripe';
+
   return {
-    isActive: userSubscription?.isActive || false,
-    isCryptoSubscription: userSubscription?.isCryptoSubscription || false,
-    subscriptionType: userSubscription?.isCryptoSubscription ? 'crypto' : 'stripe',
+    isActive,
+    isCryptoSubscription,
+    subscriptionType,
   };
 };
