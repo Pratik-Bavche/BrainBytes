@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { CreditCard, Coins, CheckCircle, Infinity } from 'lucide-react'
-import { createStripeUrl, getSubscriptionStatus } from '@/actions/user-subscription'
+import { createStripeUrl } from '@/actions/user-subscription'
 import { createCryptoSubscription } from '@/actions/cryptoSubscription'
 import { ethers } from 'ethers'
 
