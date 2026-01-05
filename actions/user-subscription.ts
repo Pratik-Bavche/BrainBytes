@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/auth0";
 
 const returnUrl = process.env.NEXT_PUBLIC_APP_URL + "/shop";
 
-// Subscription pricing configuration - use environment variable or default
+// Subscription pricing configuration from environment variables with defaults
 const SUBSCRIPTION_PRICE_CENTS = parseInt(
   process.env.STRIPE_SUBSCRIPTION_PRICE_CENTS ?? "2000",
   10
